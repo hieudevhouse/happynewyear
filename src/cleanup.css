@@ -27,22 +27,22 @@
   .topbar{height:58px!important;padding:0 16px!important}
   .player-wrap{min-height:calc(100svh - 96px)!important;padding:48px 10px 70px!important}
   .entry-card:has(.hero-mascot){width:min(520px,calc(100vw - 14px))!important;padding:0 8px 22px!important}
-  .entry-card:has(.hero-mascot) .hero-mascot{width:240px!important;height:232px!important;margin:-4px auto 0!important}
-  .entry-card:has(.hero-mascot) .hero-mascot img{width:228px!important;height:228px!important}
-  .entry-card:has(.hero-mascot) .mascot-halo{width:200px;height:200px;left:20px;top:10px}
-  .entry-card:has(.hero-mascot) h1{font-size:clamp(46px,13.5vw,62px)!important;line-height:1.02!important;letter-spacing:-1.2px!important}
+  .entry-card:has(.hero-mascot) .hero-mascot{width:min(82vw,292px)!important;height:min(80vw,284px)!important;margin:-8px auto 0!important}
+  .entry-card:has(.hero-mascot) .hero-mascot img{width:min(78vw,282px)!important;height:min(78vw,282px)!important}
+  .entry-card:has(.hero-mascot) .mascot-halo{width:min(68vw,246px);height:min(68vw,246px);left:6vw;top:11px}
+  .entry-card:has(.hero-mascot) h1{font-size:clamp(50px,15vw,66px)!important;line-height:1.01!important;letter-spacing:-1.5px!important}
   .entry-card:has(.hero-mascot) .eyebrow{font-size:11px!important;margin-bottom:15px!important}
-  .entry-card:has(.hero-mascot) .code-input{width:min(430px,100%)!important;height:68px!important;margin-top:28px!important;border-radius:15px!important}
+  .entry-card:has(.hero-mascot) .code-input{width:min(440px,100%)!important;height:72px!important;margin-top:30px!important;border-radius:16px!important}
   .entry-card:has(.hero-mascot) .code-input input{font-size:16px!important}
-  .entry-card:has(.hero-mascot) .primary-btn{width:min(300px,100%)!important;height:64px!important;margin-top:20px!important;border-radius:13px!important;font-size:15px!important}
+  .entry-card:has(.hero-mascot) .primary-btn{width:min(320px,100%)!important;height:68px!important;margin-top:21px!important;border-radius:14px!important;font-size:15px!important}
   .responsive-envelope-cloud{opacity:.9}
 }
 @media (max-width:390px){
   .player-wrap{padding-top:39px!important}
-  .entry-card:has(.hero-mascot) .hero-mascot{height:205px!important;width:215px!important}
-  .entry-card:has(.hero-mascot) .hero-mascot img{width:200px!important;height:200px!important}
-  .entry-card:has(.hero-mascot) .mascot-halo{width:176px;height:176px;left:19px}
-  .entry-card:has(.hero-mascot) h1{font-size:44px!important}
-  .entry-card:has(.hero-mascot) .code-input{height:62px!important}
-  .entry-card:has(.hero-mascot) .primary-btn{height:60px!important}
+  .entry-card:has(.hero-mascot) .hero-mascot{height:250px!important;width:260px!important}
+  .entry-card:has(.hero-mascot) .hero-mascot img{width:250px!important;height:250px!important}
+  .entry-card:has(.hero-mascot) .mascot-halo{width:220px;height:220px;left:20px}
+  .entry-card:has(.hero-mascot) h1{font-size:48px!important}
+  .entry-card:has(.hero-mascot) .code-input{height:66px!important}
+  .entry-card:has(.hero-mascot) .primary-btn{height:64px!important}
 }
