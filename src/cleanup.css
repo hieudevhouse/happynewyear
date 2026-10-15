@@ -16,3 +16,33 @@
 @media (max-width:600px){.festival-pill{top:7px!important}.entry-card:has(.hero-mascot){width:calc(100vw - 24px);padding:7px 18px 22px;border-radius:0}.hero-mascot{height:132px!important;margin-bottom:8px!important}.hero-mascot img{height:120px!important;width:120px!important}.entry-card:has(.hero-mascot)>.code-input{margin-top:18px}}
 @media (max-width:600px){.player-wrap{display:flex!important;align-items:flex-start!important;justify-content:center!important;min-height:auto!important;padding:36px 12px 78px!important}.entry-card:has(.hero-mascot){width:min(430px,100%);padding:0 10px 18px!important}.entry-card:has(.hero-mascot) .hero-mascot{height:158px!important;margin-bottom:4px!important}.entry-card:has(.hero-mascot) .hero-mascot img{width:148px!important;height:148px!important}.entry-card:has(.hero-mascot) h1{font-size:42px!important;line-height:1.04!important}.entry-card:has(.hero-mascot) .eyebrow{font-size:10px!important;margin-bottom:13px!important}.entry-card:has(.hero-mascot) .code-input{height:60px!important;margin-top:22px!important;width:min(390px,100%)!important}.entry-card:has(.hero-mascot) .primary-btn{height:56px!important;width:min(250px,100%)!important;margin-top:16px!important}.three-atmosphere canvas{opacity:.78}}
 @media (max-width:390px){.player-wrap{padding-top:30px!important}.entry-card:has(.hero-mascot) .hero-mascot{height:145px!important}.entry-card:has(.hero-mascot) .hero-mascot img{width:136px!important;height:136px!important}.entry-card:has(.hero-mascot) h1{font-size:37px!important}.entry-card:has(.hero-mascot) .code-input{height:56px!important}}
+
+/* Responsive stage: use the full phone canvas and keep every envelope inside it. */
+.app-bg{min-height:100svh;width:100%;overflow:hidden;isolation:isolate}
+.three-atmosphere{width:100%;height:100%;overflow:hidden}
+.three-atmosphere canvas{width:100%!important;height:100%!important}
+.player-wrap{width:100%;min-height:calc(100svh - 140px)}
+
+@media (max-width:600px){
+  .topbar{height:58px!important;padding:0 16px!important}
+  .player-wrap{min-height:calc(100svh - 96px)!important;padding:48px 10px 70px!important}
+  .entry-card:has(.hero-mascot){width:min(520px,calc(100vw - 14px))!important;padding:0 8px 22px!important}
+  .entry-card:has(.hero-mascot) .hero-mascot{width:190px!important;height:188px!important;margin:-4px auto 0!important}
+  .entry-card:has(.hero-mascot) .hero-mascot img{width:178px!important;height:178px!important}
+  .entry-card:has(.hero-mascot) .mascot-halo{width:158px;height:158px;left:16px;top:8px}
+  .entry-card:has(.hero-mascot) h1{font-size:clamp(42px,11.5vw,54px)!important;line-height:1.02!important;letter-spacing:-1.2px!important}
+  .entry-card:has(.hero-mascot) .eyebrow{font-size:11px!important;margin-bottom:15px!important}
+  .entry-card:has(.hero-mascot) .code-input{width:min(430px,100%)!important;height:64px!important;margin-top:25px!important;border-radius:15px!important}
+  .entry-card:has(.hero-mascot) .code-input input{font-size:15px!important}
+  .entry-card:has(.hero-mascot) .primary-btn{width:min(280px,100%)!important;height:60px!important;margin-top:18px!important;border-radius:13px!important}
+  .responsive-envelope-cloud{opacity:.9}
+}
+@media (max-width:390px){
+  .player-wrap{padding-top:39px!important}
+  .entry-card:has(.hero-mascot) .hero-mascot{height:165px!important;width:170px!important}
+  .entry-card:has(.hero-mascot) .hero-mascot img{width:156px!important;height:156px!important}
+  .entry-card:has(.hero-mascot) .mascot-halo{width:140px;height:140px;left:15px}
+  .entry-card:has(.hero-mascot) h1{font-size:39px!important}
+  .entry-card:has(.hero-mascot) .code-input{height:58px!important}
+  .entry-card:has(.hero-mascot) .primary-btn{height:56px!important}
+}
