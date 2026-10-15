@@ -1,0 +1,18 @@
+.mascot-tag{display:none!important}
+.entry-card>.red-seal{display:none!important}
+.app-bg>.petal{display:block!important}
+.hero-mascot{height:160px!important;margin:0 auto 10px!important;display:flex;justify-content:center;align-items:flex-start}
+.hero-mascot img{position:relative;display:block}
+.festival-pill{top:10px!important}
+.entry-card h1{border:0;border-radius:0;padding:0;background:transparent;box-shadow:none;-webkit-text-stroke:.45px rgba(255,216,116,.42);text-shadow:0 0 18px rgba(255,191,55,.16)}
+.entry-card h1 em{color:#ffd15f!important;-webkit-text-stroke:.6px #e2a83e;text-shadow:0 0 18px rgba(255,191,55,.32)}
+.entry-card:has(.hero-mascot)>.lead{display:none}
+.entry-card:has(.hero-mascot)>.code-input{margin-top:24px}
+.entry-card:has(.hero-mascot){width:min(500px,calc(100vw - 32px));padding:8px 36px 28px;border:1px solid rgba(255,212,111,.22);border-radius:28px;background:linear-gradient(180deg,rgba(108,14,23,.5),rgba(47,5,12,.68));box-shadow:0 24px 80px rgba(24,1,5,.34),inset 0 1px 0 rgba(255,238,184,.12);backdrop-filter:blur(8px)}
+.entry-card:has(.hero-mascot) .hero-mascot{margin-top:-4px}
+.entry-card:has(.hero-mascot) .hint{display:none}
+.entry-card:has(.hero-mascot){border:0;background:transparent;box-shadow:none;backdrop-filter:none;padding-left:36px;padding-right:36px}
+@media (max-width:900px){.hero-mascot{height:145px!important;margin-bottom:10px!important}}
+@media (max-width:600px){.festival-pill{top:7px!important}.entry-card:has(.hero-mascot){width:calc(100vw - 24px);padding:7px 18px 22px;border-radius:0}.hero-mascot{height:132px!important;margin-bottom:8px!important}.hero-mascot img{height:120px!important;width:120px!important}.entry-card:has(.hero-mascot)>.code-input{margin-top:18px}}
+@media (max-width:600px){.player-wrap{display:flex!important;align-items:flex-start!important;justify-content:center!important;min-height:auto!important;padding:36px 12px 78px!important}.entry-card:has(.hero-mascot){width:min(430px,100%);padding:0 10px 18px!important}.entry-card:has(.hero-mascot) .hero-mascot{height:158px!important;margin-bottom:4px!important}.entry-card:has(.hero-mascot) .hero-mascot img{width:148px!important;height:148px!important}.entry-card:has(.hero-mascot) h1{font-size:42px!important;line-height:1.04!important}.entry-card:has(.hero-mascot) .eyebrow{font-size:10px!important;margin-bottom:13px!important}.entry-card:has(.hero-mascot) .code-input{height:60px!important;margin-top:22px!important;width:min(390px,100%)!important}.entry-card:has(.hero-mascot) .primary-btn{height:56px!important;width:min(250px,100%)!important;margin-top:16px!important}.three-atmosphere canvas{opacity:.78}}
+@media (max-width:390px){.player-wrap{padding-top:30px!important}.entry-card:has(.hero-mascot) .hero-mascot{height:145px!important}.entry-card:has(.hero-mascot) .hero-mascot img{width:136px!important;height:136px!important}.entry-card:has(.hero-mascot) h1{font-size:37px!important}.entry-card:has(.hero-mascot) .code-input{height:56px!important}}
