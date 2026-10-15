@@ -1,49 +1,342 @@
-.mascot-tag{display:none!important}
-.entry-card>.red-seal{display:none!important}
-.app-bg>.petal{display:block!important}
-.hero-mascot{height:160px!important;margin:0 auto 10px!important;display:flex;justify-content:center;align-items:flex-start}
-.hero-mascot img{position:relative;display:block}
-.festival-pill{top:10px!important}
-.entry-card h1{border:0;border-radius:0;padding:0;background:transparent;box-shadow:none;-webkit-text-stroke:.45px rgba(255,216,116,.42);text-shadow:0 0 18px rgba(255,191,55,.16)}
-.entry-card h1 em{color:#ffd15f!important;-webkit-text-stroke:.6px #e2a83e;text-shadow:0 0 18px rgba(255,191,55,.32)}
-.entry-card:has(.hero-mascot)>.lead{display:none}
-.entry-card:has(.hero-mascot)>.code-input{margin-top:24px}
-.entry-card:has(.hero-mascot){width:min(500px,calc(100vw - 32px));padding:8px 36px 28px;border:1px solid rgba(255,212,111,.22);border-radius:28px;background:linear-gradient(180deg,rgba(108,14,23,.5),rgba(47,5,12,.68));box-shadow:0 24px 80px rgba(24,1,5,.34),inset 0 1px 0 rgba(255,238,184,.12);backdrop-filter:blur(8px)}
-.entry-card:has(.hero-mascot) .hero-mascot{margin-top:-4px}
-.entry-card:has(.hero-mascot) .hint{display:none}
-.entry-card:has(.hero-mascot){border:0;background:transparent;box-shadow:none;backdrop-filter:none;padding-left:36px;padding-right:36px}
-@media (max-width:900px){.hero-mascot{height:145px!important;margin-bottom:10px!important}}
-@media (max-width:600px){.festival-pill{top:7px!important}.entry-card:has(.hero-mascot){width:calc(100vw - 24px);padding:7px 18px 22px;border-radius:0}.hero-mascot{height:132px!important;margin-bottom:8px!important}.hero-mascot img{height:120px!important;width:120px!important}.entry-card:has(.hero-mascot)>.code-input{margin-top:18px}}
-@media (max-width:600px){.player-wrap{display:flex!important;align-items:flex-start!important;justify-content:center!important;min-height:auto!important;padding:36px 12px 78px!important}.entry-card:has(.hero-mascot){width:min(430px,100%);padding:0 10px 18px!important}.entry-card:has(.hero-mascot) .hero-mascot{height:158px!important;margin-bottom:4px!important}.entry-card:has(.hero-mascot) .hero-mascot img{width:148px!important;height:148px!important}.entry-card:has(.hero-mascot) h1{font-size:42px!important;line-height:1.04!important}.entry-card:has(.hero-mascot) .eyebrow{font-size:10px!important;margin-bottom:13px!important}.entry-card:has(.hero-mascot) .code-input{height:60px!important;margin-top:22px!important;width:min(390px,100%)!important}.entry-card:has(.hero-mascot) .primary-btn{height:56px!important;width:min(250px,100%)!important;margin-top:16px!important}.three-atmosphere canvas{opacity:.78}}
-@media (max-width:390px){.player-wrap{padding-top:30px!important}.entry-card:has(.hero-mascot) .hero-mascot{height:145px!important}.entry-card:has(.hero-mascot) .hero-mascot img{width:136px!important;height:136px!important}.entry-card:has(.hero-mascot) h1{font-size:37px!important}.entry-card:has(.hero-mascot) .code-input{height:56px!important}}
-
-/* Responsive stage: use the full phone canvas and keep every envelope inside it. */
-.app-bg{min-height:100svh;width:100%;overflow:hidden;isolation:isolate}
-.three-atmosphere{width:100%;height:100%;overflow:hidden}
-.three-atmosphere canvas{width:100%!important;height:100%!important}
-.player-wrap{width:100%;min-height:calc(100svh - 140px)}
-
-@media (max-width:600px){
-  .topbar{height:58px!important;padding:0 16px!important}
-  .player-wrap{min-height:calc(100svh - 96px)!important;padding:48px 10px 70px!important}
-  .entry-card:has(.hero-mascot){width:min(520px,calc(100vw - 14px))!important;padding:0 8px 22px!important}
-  .entry-card:has(.hero-mascot) .hero-mascot{width:min(92vw,348px)!important;height:min(90vw,338px)!important;margin:-12px auto 0!important}
-  .entry-card:has(.hero-mascot) .hero-mascot img{width:min(88vw,336px)!important;height:min(88vw,336px)!important}
-  .entry-card:has(.hero-mascot) .mascot-halo{width:min(78vw,298px);height:min(78vw,298px);left:7vw;top:13px}
-  .entry-card:has(.hero-mascot) h1{font-size:clamp(60px,18vw,80px)!important;line-height:1.01!important;letter-spacing:-1.9px!important}
-  .entry-card:has(.hero-mascot) .eyebrow{font-size:12px!important;letter-spacing:3.5px!important;margin-bottom:17px!important}
-  .entry-card:has(.hero-mascot) .code-input{width:min(460px,100%)!important;height:82px!important;margin-top:34px!important;border-radius:18px!important}
-  .entry-card:has(.hero-mascot) .code-input input{font-size:19px!important}
-  .entry-card:has(.hero-mascot) .code-input svg{width:24px!important;height:24px!important}
-  .entry-card:has(.hero-mascot) .primary-btn{width:min(360px,100%)!important;height:76px!important;margin-top:24px!important;border-radius:16px!important;font-size:17px!important}
-  .responsive-envelope-cloud{opacity:.9}
+/* Responsive player layout shared by every step. */
+.app-bg {
+  --player-width: 100%;
+  --player-max-width: 36rem;
+  --player-title-size: clamp(2rem, 3.4vw, 3.1rem);
+  --mascot-max-width: 14rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100svh;
+  isolation: isolate;
 }
-@media (max-width:390px){
-  .player-wrap{padding-top:39px!important}
-  .entry-card:has(.hero-mascot) .hero-mascot{height:305px!important;width:315px!important}
-  .entry-card:has(.hero-mascot) .hero-mascot img{width:300px!important;height:300px!important}
-  .entry-card:has(.hero-mascot) .mascot-halo{width:264px;height:264px;left:25px}
-  .entry-card:has(.hero-mascot) h1{font-size:57px!important}
-  .entry-card:has(.hero-mascot) .code-input{height:74px!important}
-  .entry-card:has(.hero-mascot) .primary-btn{height:70px!important}
+
+.app-bg > .petal {
+  pointer-events: none;
+}
+
+/* Match the viewport used by the Three.js camera, including on scrolling pages. */
+.app-bg .three-atmosphere {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.three-atmosphere canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.app-bg .topbar {
+  flex: 0 0 auto;
+  height: auto;
+  min-height: clamp(3.5rem, 8svh, 5.25rem);
+  padding: max(.75rem, env(safe-area-inset-top)) 5% .75rem;
+}
+
+.app-bg .player-wrap {
+  flex: 1 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+  justify-items: center;
+  gap: clamp(1rem, 2.5svh, 2rem);
+  width: 100%;
+  min-height: 0;
+  padding: clamp(.75rem, 2svh, 2rem) 5% clamp(1.75rem, 4svh, 3rem);
+}
+
+.app-bg .festival-pill {
+  position: static;
+  transform: none;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .8em;
+  max-width: 100%;
+  font-size: clamp(.625rem, 1.3vw, .75rem);
+  line-height: 1.6;
+  letter-spacing: .2em;
+  text-align: center;
+  white-space: normal;
+}
+
+.app-bg .entry-card,
+.app-bg .spin-card,
+.app-bg .result-card {
+  width: var(--player-width);
+  max-width: var(--player-max-width);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.app-bg .hero-mascot {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 66%;
+  max-width: min(var(--mascot-max-width), 30svh);
+  height: auto;
+  /* Reserve the full image height and contain the floating animation. */
+  aspect-ratio: 1;
+  padding: .75rem;
+  margin: 0 auto clamp(.75rem, 2svh, 1.5rem);
+}
+
+.app-bg .hero-mascot img {
+  position: relative;
+  display: block;
+  flex: 0 1 auto;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+
+.app-bg .mascot-halo {
+  inset: 8%;
+  width: 84%;
+  height: 84%;
+}
+
+.app-bg .mascot-tag,
+.app-bg .entry-card > .red-seal,
+.app-bg .entry-card:has(.hero-mascot) > .lead {
+  display: none;
+}
+
+.app-bg .entry-card h1,
+.app-bg .result-card h1 {
+  margin: 0;
+  padding: 0;
+  font-size: var(--player-title-size);
+  line-height: 1.16;
+  letter-spacing: -.025em;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.app-bg .entry-card h1 em,
+.app-bg .result-card h1 em {
+  color: #ffd15f;
+  text-shadow: 0 0 1.125rem rgba(255, 191, 55, .25);
+}
+
+.app-bg .eyebrow {
+  margin: 0 0 clamp(.75rem, 1.8svh, 1.25rem);
+  font-size: clamp(.625rem, 1.2vw, .8rem);
+  line-height: 1.6;
+  letter-spacing: .18em;
+  overflow-wrap: anywhere;
+}
+
+.app-bg .lead {
+  margin: 1rem 0 1.5rem;
+  font-size: clamp(.875rem, 1.8vw, 1.125rem);
+  line-height: 1.7;
+}
+
+.app-bg .code-input {
+  width: 94%;
+  max-width: 29rem;
+  height: auto;
+  min-height: clamp(3.5rem, 6svh, 4.25rem);
+  margin: 0 auto;
+  padding: .875rem 4%;
+  gap: clamp(.5rem, 2vw, .875rem);
+  border-radius: .875rem;
+}
+
+.app-bg .entry-card:has(.hero-mascot) > .code-input {
+  margin-top: clamp(1.25rem, 3svh, 2rem);
+}
+
+.app-bg .code-input input {
+  flex: 1 1 0;
+  width: 100%;
+  min-width: 0;
+  font-size: 1rem;
+}
+
+.app-bg .code-input > svg,
+.app-bg .code-input > span,
+.app-bg .primary-btn > svg {
+  flex-shrink: 0;
+}
+
+.app-bg .code-input > span {
+  font-size: .625rem;
+  white-space: nowrap;
+}
+
+.app-bg .primary-btn {
+  width: 78%;
+  max-width: 26rem;
+  min-width: 0;
+  height: auto;
+  min-height: clamp(3.25rem, 6svh, 4rem);
+  margin-top: clamp(1rem, 2svh, 1.5rem);
+  padding: .875rem 5%;
+  border-radius: .875rem;
+  font-size: clamp(.875rem, 1.6vw, 1rem);
+  line-height: 1.4;
+}
+
+.app-bg .hint,
+.app-bg .error {
+  font-size: clamp(.75rem, 1.4vw, .875rem);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.app-bg .error {
+  color: #ffcf9b;
+}
+
+.app-bg .back-btn {
+  min-height: 2.75rem;
+  margin-top: .75rem;
+  color: #f0c69d;
+}
+
+.app-bg .spin-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .875rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.app-bg .spin-head h2 {
+  font-size: clamp(1.625rem, 3.5vw, 2.25rem);
+}
+
+.app-bg .code-badge {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.app-bg .wheel-wrap {
+  width: 76%;
+  max-width: min(24rem, 50svh);
+  height: auto;
+  aspect-ratio: 1;
+  margin: 1.5rem auto;
+}
+
+.app-bg .prize-ticket,
+.app-bg .result-code {
+  width: 94%;
+  max-width: 29rem;
+  overflow-wrap: anywhere;
+}
+
+.app-bg .prize-ticket {
+  gap: 4%;
+  margin: 1.5rem auto 1rem;
+  padding: clamp(1rem, 3vw, 1.5rem) 6%;
+}
+
+.app-bg .prize-icon {
+  flex-shrink: 0;
+}
+
+.app-bg .prize-ticket > div:last-child,
+.app-bg .result-code > span {
+  min-width: 0;
+}
+
+.app-bg .prize-ticket h2 {
+  font-size: clamp(1.125rem, 2.8vw, 1.5rem);
+}
+
+.app-bg .player-footer {
+  position: relative;
+  bottom: auto;
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: .625em;
+  width: 100%;
+  padding: 1rem 5% max(1rem, env(safe-area-inset-bottom));
+  font-size: clamp(.625rem, 1.2vw, .75rem);
+  line-height: 1.6;
+}
+
+.app-bg .player-footer > span {
+  display: inline;
+}
+
+.app-bg .player-footer .footer-dot {
+  margin: 0;
+}
+
+/* Portrait tablets use a percentage of their wider canvas. */
+@media (min-width: 40rem) and (orientation: portrait) {
+  .app-bg {
+    --player-width: 82%;
+    --player-max-width: 48rem;
+    --player-title-size: clamp(2.75rem, 6vw, 4.75rem);
+    --mascot-max-width: 24rem;
+  }
+}
+
+@media (max-width: 39.99rem) {
+  .app-bg {
+    --player-title-size: clamp(1.875rem, 8.8vw, 3.25rem);
+    --mascot-max-width: 20rem;
+  }
+
+  .app-bg .lead br {
+    display: none;
+  }
+
+  .app-bg .three-atmosphere {
+    opacity: .7;
+  }
+
+  .app-bg .player-footer .footer-dot {
+    display: none;
+  }
+
+  .app-bg .player-footer > span:last-child {
+    flex-basis: 100%;
+  }
+}
+
+/* Short screens scroll naturally and leave room for the controls. */
+@media (max-height: 32rem) and (orientation: landscape) {
+  .app-bg {
+    --player-title-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .app-bg .player-wrap {
+    align-content: start;
+    gap: .75rem;
+  }
+
+  .app-bg .hero-mascot {
+    max-width: 25svh;
+    padding: .5rem;
+    margin-bottom: .75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-bg .hero-mascot img,
+  .app-bg .entry-card,
+  .app-bg .spin-card,
+  .app-bg .result-card {
+    animation: none;
+  }
 }

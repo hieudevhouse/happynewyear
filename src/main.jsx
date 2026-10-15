@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import { ArrowRight, Check, ChevronDown, CircleHelp, Copy, Crown, Gift, LayoutDashboard, LogOut, Plus, RotateCw, Search, Settings, Sparkles, Ticket, Trash2, Users, X, Zap } from 'lucide-react';

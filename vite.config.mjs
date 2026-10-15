@@ -6,6 +6,15 @@ export default {
   esbuild: false,
   plugins: [
     {
+      name: 'fix-react-router-default-import',
+      enforce: 'pre',
+      transform(code, id) {
+        if (!id.includes('node_modules/react-router/')) return null;
+        const fixed = code.replace(/import React(\d*) from ["']react["'];/g, 'import * as React$1 from "react";');
+        return fixed === code ? null : { code: fixed, map: null };
+      }
+    },
+    {
       name: 'strip-broken-lucide-sourcemaps',
       enforce: 'pre',
       async load(id) {
@@ -37,6 +46,14 @@ export default {
     hmr: { overlay: false }
   },
   optimizeDeps: {
-    noDiscovery: true
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'react-router',
+      'cookie',
+      'set-cookie-parser',
+      'lucide-react'
+    ]
   }
 };
