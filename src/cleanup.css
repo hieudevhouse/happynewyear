@@ -121,6 +121,12 @@
   text-wrap: balance;
 }
 
+.app-bg .entry-card h1 {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif;
+  font-weight: 700;
+  letter-spacing: -.04em;
+}
+
 .app-bg .entry-card h1 em,
 .app-bg .result-card h1 em {
   color: #ffd15f;
