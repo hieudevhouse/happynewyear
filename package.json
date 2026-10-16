@@ -6,7 +6,8 @@
     "dev": "concurrently \"node start-vite.mjs --host 0.0.0.0\" \"node server.js\"",
     "client": "node start-vite.mjs --host 0.0.0.0 --config vite.config.mjs --configLoader runner",
     "server": "node server.js",
-    "build": "vite build"
+    "build": "vite build",
+    "test:tree": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "cors": "^2.8.5",

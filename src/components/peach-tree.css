@@ -1,0 +1,250 @@
+.lucky-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100svh;
+  min-height: 32rem;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overflow: hidden;
+  isolation: isolate;
+  background: radial-gradient(ellipse at 18% 8%, #fffbd779, transparent 34%), linear-gradient(180deg, #71c8f4 0%, #b5e7fc 48%, #dcf3de 72%, #7cbe57 84%, #429344 100%);
+  color: #752d36;
+}
+
+.lucky-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.lucky-tree-area {
+  position: relative;
+  flex: 1 0 24rem;
+  min-height: 24rem;
+  width: 100%;
+}
+
+.peach-tree-card,
+.peach-garden {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.peach-garden { overflow: hidden; isolation: isolate; }
+
+.peach-garden::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 6rem 1rem at 13% 18%, #ffffffb3 35%, transparent 75%),
+    radial-gradient(ellipse 3.5rem 1.3rem at 15% 16.5%, #ffffffa6 30%, transparent 75%),
+    radial-gradient(ellipse 7rem 1.1rem at 86% 25%, #ffffffa6 35%, transparent 75%),
+    radial-gradient(ellipse 4rem 1.4rem at 83% 23.5%, #ffffff8c 30%, transparent 75%);
+}
+
+.peach-garden-grain {
+  position: absolute;
+  inset: 0;
+  opacity: .12;
+  background-image: radial-gradient(#fff9d94d .5px, transparent .5px);
+  background-size: 5px 5px;
+  mask-image: linear-gradient(transparent, #0008);
+  pointer-events: none;
+}
+
+.peach-tree-canvas,
+.peach-tree-illustration,
+.peach-envelope-targets {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.peach-tree-canvas canvas { display: block; width: 100%; height: 100%; }
+.peach-tree-canvas { opacity: 0; transition: opacity .6s ease; }
+.peach-garden.is-ready .peach-tree-canvas { opacity: 1; }
+.peach-garden.is-illustrated .peach-tree-canvas { display: none; }
+.peach-tree-illustration { z-index: 1; }
+.peach-envelope-targets { z-index: 2; pointer-events: none; }
+
+.peach-envelope-hit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 3.125rem;
+  visibility: hidden;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: .65rem;
+  background: transparent;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.peach-envelope-hit[hidden] { display: none; }
+
+.peach-envelope-hit:hover:enabled,
+.peach-envelope-hit.is-selected {
+  border-color: #ffe0a080;
+  background: #ffe0a00c;
+  box-shadow: 0 0 1.5rem #ffd89b20;
+}
+
+.peach-envelope-hit:focus-visible,
+.lucky-reward-item:focus-visible,
+.lucky-reward-close:focus-visible,
+.lucky-reward-return:focus-visible {
+  outline: 2px solid #ffe6b7;
+  outline-offset: 4px;
+}
+
+.peach-tree-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #c3314a;
+}
+
+.peach-tree-loading svg { animation: peach-breathe 1.5s ease-in-out infinite; }
+.is-illustrated .peach-envelope-hit { visibility: visible; transform: translate(-50%, -50%); }
+.peach-illustrated-packet { position: relative; width: 1.8rem; height: 2.6rem; border: 1px solid var(--packet-gold); border-radius: 2px 2px 5px 5px; background: var(--packet-color); box-shadow: 0 .25rem .5rem #17050d44; }
+.peach-illustrated-packet::before { content: ''; position: absolute; bottom: 100%; left: 50%; width: 1px; height: 1rem; background: var(--packet-gold); }
+.peach-illustrated-packet em { position: absolute; inset: 0; display: grid; place-items: center; color: var(--packet-gold); font: 1.2rem serif; }
+.is-opening .is-illustrated .peach-envelope-hit.is-selected { animation: peach-envelope-open 1.4s ease both; }
+
+.lucky-rewards {
+  position: relative;
+  flex: 0 0 auto;
+  width: min(94%, 64rem);
+  margin: 0 auto .75rem;
+  padding: .8rem 1rem .65rem;
+  border: 1px solid #fff2c9aa;
+  border-top: 2px solid #c94251;
+  border-radius: 1rem;
+  background: #fffff0df;
+  box-shadow: 0 .3rem 1.6rem #1f68371f;
+  backdrop-filter: blur(10px);
+  animation: peach-reward-in .4s ease both;
+}
+
+.lucky-rewards-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: .6rem;
+  color: #923549;
+  font-size: .6875rem;
+  letter-spacing: .04em;
+}
+
+.lucky-rewards-label > span { color: #7c8d55; font-size: .625rem; }
+.lucky-rewards-list { display: flex; gap: .6rem; overflow-x: auto; padding: .25rem .15rem .45rem; scrollbar-width: thin; scrollbar-color: #b65a6566 transparent; }
+
+.lucky-reward-item {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: .7rem;
+  max-width: 18rem;
+  min-height: 4rem;
+  padding: .65rem .95rem;
+  border: 1px solid #dbad8560;
+  border-radius: .8rem;
+  background: #fff9eec9;
+  text-align: left;
+  color: #742d3d;
+}
+
+.lucky-reward-item:hover { background: #ffede6; border-color: #c85a6a99; }
+.lucky-reward-icon { font-size: 1.6rem; }
+.lucky-reward-item small { display: block; margin-bottom: .2rem; color: #a35e4e; font-size: .5rem; letter-spacing: .12em; }
+.lucky-reward-item strong { display: block; font-size: .75rem; font-weight: 500; overflow-wrap: anywhere; }
+
+.lucky-reward-dialog {
+  width: min(90%, 26rem);
+  max-height: 90svh;
+  overflow-y: auto;
+  padding: clamp(1.75rem, 6vw, 3rem) clamp(1.25rem, 5vw, 2.5rem) 1.75rem;
+  border: 1px solid #efd19c66;
+  border-radius: 1.5rem;
+  background: radial-gradient(circle at 50% 10%, #ab4a49, #632330 50%, #391321);
+  box-shadow: 0 2rem 7rem #16040dbb, inset 0 1px 0 #ffeaca22;
+  color: #fff2da;
+  text-align: center;
+  animation: peach-reward-in .45s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.lucky-reward-dialog::backdrop { background: #16081299; backdrop-filter: blur(8px); }
+
+.lucky-reward-close {
+  position: absolute;
+  top: .65rem;
+  right: .65rem;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: transparent;
+  color: #f7d4b0;
+}
+
+.lucky-reward-close:hover { background: #ffe3b710; }
+.lucky-reward-emblem { display: grid; place-items: center; width: 6rem; aspect-ratio: 1; margin: .5rem auto 1.5rem; border: 1px solid #f3d5a144; border-radius: 50%; background: radial-gradient(circle, #fbd7a633, #fbd7a608 70%); box-shadow: 0 0 3rem #fbd7a61a; font-size: 3rem; }
+.lucky-reward-kicker { margin: 0 0 .75rem; color: #e6bf8e; font-size: .625rem; letter-spacing: .2em; }
+.lucky-reward-dialog h2 { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif; font-size: clamp(1.65rem, 6vw, 2.1rem); line-height: 1.2; letter-spacing: -.03em; text-wrap: balance; }
+.lucky-reward-message { margin: 1rem 0; color: #e2bfae; font-size: .875rem; line-height: 1.7; }
+.lucky-reward-source { display: block; color: #c4a18b; font-size: .6875rem; line-height: 1.7; }
+
+.lucky-reward-return {
+  width: 100%;
+  min-height: 3.25rem;
+  margin-top: 1.75rem;
+  padding: .75rem 1rem;
+  border: 1px solid #ffe6ba44;
+  border-radius: .8rem;
+  background: linear-gradient(125deg, #f2d2a0, #d9a568);
+  color: #52232a;
+  font-weight: 700;
+  font-size: .875rem;
+}
+
+.lucky-reward-return:hover { filter: brightness(1.05); }
+
+@keyframes peach-breathe { 50% { opacity: .45; transform: scale(.92); } }
+.peach-illustrated-falling { animation: peach-petal-fall 9s linear infinite; }
+@keyframes peach-petal-fall {
+  0% { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+  8% { opacity: 1; }
+  80%, 94% { opacity: 1; transform: translate(var(--petal-x), var(--petal-y)) rotate(240deg); }
+  100% { opacity: 0; transform: translate(var(--petal-x), var(--petal-y)) rotate(240deg); }
+}
+@keyframes peach-envelope-open { to { opacity: 0; scale: 2; translate: 0 -3rem; } }
+@keyframes peach-reward-in { from { opacity: 0; transform: translateY(1rem) scale(.96); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 44rem) {
+  .lucky-rewards { width: 92%; }
+  .lucky-reward-item { min-height: 3.5rem; padding: .6rem .75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .peach-illustrated-falling { display: none; }
+  .peach-tree-loading svg,
+  .is-opening .is-illustrated .peach-envelope-hit.is-selected,
+  .lucky-rewards,
+  .lucky-reward-dialog { animation: none; }
+  .peach-tree-canvas { transition: none; }
+}
