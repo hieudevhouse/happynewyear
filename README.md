@@ -21,7 +21,7 @@ Sao chép `.env.example` thành `.env` nếu muốn đổi MongoDB URI. Khi Mong
 
 ## Luồng chính
 
-1. `HomePage` tại `/`: nhập mã dạng `LM-2027-XXXX`.
+1. `HomePage` tại `/`: nhập mã dạng `2027-XXXX`.
 2. `InfoPage` tại `/info`: điền tên người nhận lộc.
 3. `LuckyPage` tại `/lucky`: chạm một bao lì xì để mở ngay. Phần thưởng xuất hiện trên cây và tự đóng sau 5 giây; cũng có thể bấm **Về cây đào**. Quà đã mở nằm ở dải phía dưới, bấm vào để xem lại mà không nhận trùng.
 4. Admin quản lý mã quay, trạng thái sử dụng, tên người quay và phần thưởng.
