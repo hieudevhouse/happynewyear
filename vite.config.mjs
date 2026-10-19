@@ -1,8 +1,11 @@
 import { transformAsync } from '@babel/core';
 import presetReact from '@babel/preset-react';
 import { readFile } from 'node:fs/promises';
+import { loadEnv } from 'vite';
 
-export default {
+export default ({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  return {
   esbuild: false,
   plugins: [
     {
@@ -43,7 +46,10 @@ export default {
   ],
   server: {
     host: '0.0.0.0',
-    hmr: { overlay: false }
+    hmr: { overlay: false },
+    proxy: {
+      '/api': { target: env.API_PROXY_TARGET || `http://127.0.0.1:${env.PORT || 4000}`, changeOrigin: false }
+    }
   },
   optimizeDeps: {
     include: [
@@ -56,4 +62,5 @@ export default {
       'lucide-react'
     ]
   }
+  };
 };

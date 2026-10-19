@@ -1,45 +1,44 @@
-import express from 'express';
-import cors from 'cors';
-import mongoose from 'mongoose';
+import { pathToFileURL } from 'node:url';
+import { existsSync } from 'node:fs';
+import { createApp } from './server/app.js';
+import { MongoStore } from './server/mongo-store.js';
+import { PRIZES } from './src/data/prizes.js';
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+export { createApp } from './server/app.js';
 
-const codeSchema = new mongoose.Schema({ code: { type: String, unique: true }, status: { type: String, default: 'available' }, usedBy: String, prize: String, usedAt: Date }, { timestamps: true });
-const winnerSchema = new mongoose.Schema({ name: String, code: String, prize: String, spinAt: { type: Date, default: Date.now } });
-const Code = mongoose.model('Code', codeSchema);
-const Winner = mongoose.model('Winner', winnerSchema);
+export async function startServer() {
+  if (existsSync('.env')) process.loadEnvFile('.env');
+  const config = {
+    production: process.env.NODE_ENV === 'production',
+    clientOrigins: (process.env.CLIENT_ORIGIN || 'http://localhost:5173').split(',').map(value => value.trim()).filter(Boolean),
+    sessionDays: 30,
+  };
+  const uri = process.env.MONGO_URI;
+  const username = process.env.ADMIN_USERNAME;
+  const password = process.env.ADMIN_PASSWORD;
+  if (!uri) throw new Error('MONGO_URI is required. Configure MongoDB in .env.');
+  if (!username || !password || password.length < 12) throw new Error('ADMIN_USERNAME and ADMIN_PASSWORD (at least 12 characters) are required.');
+  const store = new MongoStore();
+  await store.connect(uri);
+  await store.initialize({ username, password, prizes: PRIZES });
+  const app = createApp({ store, config });
+  const port = Number(process.env.PORT || 4000);
+  const server = app.listen(port, '0.0.0.0', () => console.log(`LuckyMoney API listening on port ${port}`));
+  let closing = false;
+  const close = async () => {
+    if (closing) return;
+    closing = true;
+    server.close(async () => { await store.close(); process.exit(0); });
+  };
+  process.on('SIGINT', close);
+  process.on('SIGTERM', close);
+  return { app, server, store };
+}
 
-const prizes = ['Lộc Phát 2027', 'Tài Lộc May Mắn', 'Xuân An Khang', 'Vạn Sự Như Ý', 'Bình An Hạnh Phúc'];
-app.get('/api/health', (_, res) => res.json({ ok: true, service: 'LuckyMoney 2027' }));
-app.post('/api/codes/validate', async (req, res) => {
-  const code = String(req.body.code || '').trim().toUpperCase();
-  if (!code) return res.status(400).json({ message: 'Vui lòng nhập mã quay.' });
-  if (mongoose.connection.readyState !== 1) return res.json({ valid: code.startsWith('LM-'), code });
-  const record = await Code.findOne({ code });
-  res.json({ valid: Boolean(record && record.status === 'available'), code });
-});
-app.post('/api/spins', async (req, res) => {
-  const { name, code, prize } = req.body;
-  if (!name || !code || !prize) return res.status(400).json({ message: 'Thiếu thông tin lượt quay.' });
-  if (mongoose.connection.readyState === 1) {
-    await Code.findOneAndUpdate({ code, status: 'available' }, { status: 'used', usedBy: name, prize, usedAt: new Date() });
-    await Winner.create({ name, code, prize });
-  }
-  res.json({ ok: true });
-});
-app.get('/api/admin/codes', async (_, res) => {
-  if (mongoose.connection.readyState !== 1) return res.json([{ code: 'LM-2027-8F2K', status: 'available' }, { code: 'LM-2027-3A7Q', status: 'used', usedBy: 'Nguyễn Minh Anh', prize: 'Lộc Phát 2027' }]);
-  res.json(await Code.find().sort({ createdAt: -1 }));
-});
-app.post('/api/admin/codes', async (req, res) => {
-  const code = String(req.body.code || `LM-2027-${Math.random().toString(36).slice(2, 6).toUpperCase()}`).toUpperCase();
-  if (mongoose.connection.readyState === 1) return res.json(await Code.create({ code }));
-  res.json({ code, status: 'available' });
-});
-app.delete('/api/admin/codes/:code', async (req, res) => { if (mongoose.connection.readyState === 1) await Code.deleteOne({ code: req.params.code }); res.json({ ok: true }); });
-
-const PORT = process.env.PORT || 4000;
-mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/luckymoney2027').catch(() => console.log('MongoDB chưa kết nối — đang chạy demo mode.'));
-app.listen(PORT, '0.0.0.0', () => console.log(`LuckyMoney API running on port ${PORT} — accessible on your local network`));
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  startServer().catch(() => {
+    // Connection errors may contain database credentials. Do not log the raw exception.
+    console.error('API startup failed. Check MONGO_URI, MongoDB access, and administrator configuration in .env.');
+    process.exitCode = 1;
+  });
+}

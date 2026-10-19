@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"node start-vite.mjs --host 0.0.0.0\" \"node server.js\"",
+    "setup": "node scripts/setup-env.mjs",
+    "dev": "concurrently --kill-others-on-fail \"npm run client\" \"npm run server\"",
     "client": "node start-vite.mjs --host 0.0.0.0 --config vite.config.mjs --configLoader runner",
     "server": "node server.js",
-    "build": "vite build",
-    "test:tree": "node --test tests/*.test.mjs"
+    "build": "node start-vite.mjs build --config vite.config.mjs --configLoader runner",
+    "test": "node --test --experimental-test-isolation=none tests/*.test.mjs",
+    "test:tree": "node --test --experimental-test-isolation=none tests/peach-*.test.mjs tests/player-session.test.mjs"
   },
   "dependencies": {
     "cors": "^2.8.5",

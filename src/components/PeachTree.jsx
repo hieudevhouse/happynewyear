@@ -86,20 +86,33 @@ export default function PeachTree({ opened = [], onOpened, disabled = false }) {
   const buttons = useRef([]);
   const scene = useRef(null);
   const locked = useRef(false);
+  const confirming = useRef(false);
+  const mounted = useRef(false);
+  const confirmedOpened = useRef(opened);
+  confirmedOpened.current = opened;
   const pending = useRef(null);
   const fallbackTimer = useRef(null);
   const reveal = useRef(onOpened);
   reveal.current = onOpened;
   const finish = useRef(null);
-  finish.current = index => {
-    if (!locked.current) return;
-    locked.current = false;
-    pending.current = null;
-    setOpening(null);
-    reveal.current(index);
+  finish.current = async index => {
+    if (!locked.current || confirming.current) return;
+    confirming.current = true;
+    try {
+      await reveal.current(index);
+    } catch {
+      // The server is authoritative: put an unconfirmed packet back for a retry.
+      scene.current?.setOpened(confirmedOpened.current);
+    } finally {
+      confirming.current = false;
+      locked.current = false;
+      pending.current = null;
+      if (mounted.current) setOpening(null);
+    }
   };
 
   useEffect(() => {
+    mounted.current = true;
     let active = true;
     scene.current = mountPeachTree(host.current, buttons.current, {
       opened,
@@ -109,6 +122,7 @@ export default function PeachTree({ opened = [], onOpened, disabled = false }) {
     });
     return () => {
       active = false;
+      mounted.current = false;
       clearTimeout(fallbackTimer.current);
       scene.current?.dispose();
       scene.current = null;
@@ -121,14 +135,14 @@ export default function PeachTree({ opened = [], onOpened, disabled = false }) {
     if (!fallback) return;
     scene.current?.dispose();
     scene.current = null;
-    if (locked.current && pending.current !== null) {
+    if (locked.current && !confirming.current && pending.current !== null) {
       const index = pending.current;
       fallbackTimer.current = setTimeout(() => finish.current(index), 1100);
     }
   }, [fallback]);
 
   const open = index => {
-    if (!ready || disabled || locked.current || opened.includes(index)) return;
+    if (!ready || disabled || locked.current || opened.length > 0) return;
     locked.current = true;
     pending.current = index;
     if (scene.current && !scene.current.open(index)) {
@@ -145,12 +159,12 @@ export default function PeachTree({ opened = [], onOpened, disabled = false }) {
       <div className="peach-garden-grain" aria-hidden="true"/>
       <div className="peach-tree-canvas" ref={host}/>
       {fallback && <IllustratedTree/>}
-      <div className="peach-envelope-targets" role="group" aria-label="Chạm một bao lì xì để mở">
+      <div className="peach-envelope-targets" role="group" aria-label={opened.length > 0 ? 'Mã này đã nhận một phần quà' : 'Chọn một bao lì xì duy nhất để nhận quà'}>
         {ENVELOPE_ANCHORS.map((anchor, index) => {
           const style = ENVELOPE_STYLES[index % ENVELOPE_STYLES.length];
           return <button key={index} ref={element => { buttons.current[index] = element; }} type="button"
             className={`peach-envelope-hit${opening === index ? ' is-selected' : ''}`}
-            onClick={() => open(index)} disabled={disabled || opening !== null || !ready || opened.includes(index)}
+            onClick={() => open(index)} disabled={disabled || opening !== null || !ready || opened.length > 0}
             hidden={opened.includes(index) || (opening !== null && (!fallback || opening !== index))}
             aria-label={`Mở bao lì xì số ${index + 1}, họa tiết ${style.name}`}
             style={fallback ? {

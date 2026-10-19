@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="16" fill="#7f1718"/>
+  <circle cx="32" cy="32" r="25" fill="none" stroke="#efb534" stroke-width="2"/>
+  <circle cx="32" cy="32" r="21" fill="none" stroke="#efb534" stroke-width=".8"/>
+  <text x="32" y="44" text-anchor="middle" fill="#f9d57c" font-family="serif" font-size="35">福</text>
+</svg>

@@ -5,28 +5,31 @@ import {
   createPlayerSession, startPlayerSession, restorePlayerSession, openPlayerEnvelope, getPlayerReward
 } from '../src/state/playerSession.js';
 
-test('a player can receive several envelopes without changing their assigned gifts', () => {
+test('a code can receive only one envelope and retains its assigned prize', () => {
   let player = { ...createPlayerSession('lm-2027-8f2k'), name: 'Minh Anh' };
-  const first = getPlayerReward(player, 4);
+  assert.equal(getPlayerReward(player, 4), null);
   player = openPlayerEnvelope(player, 4);
+  const first = getPlayerReward(player, 4);
   player = openPlayerEnvelope(player, 11);
-  assert.deepEqual(player.opened, [4, 11]);
+  assert.deepEqual(player.opened, [4]);
   assert.deepEqual(getPlayerReward(player, 4), first);
+  assert.equal(getPlayerReward(player, 11), null);
   assert.equal(PRIZES.includes(first.prize), true);
 });
 
 test('duplicate clicks and invalid envelope IDs cannot grant extra rewards', () => {
   const player = openPlayerEnvelope(createPlayerSession('LM-2027-8F2K'), 7);
-  for (const id of [7, -1, 16, .5, '2', null]) assert.equal(openPlayerEnvelope(player, id), player);
+  for (const id of [7, 2, 15, -1, 16, .5, '2', null]) assert.equal(openPlayerEnvelope(player, id), player);
   assert.equal(getPlayerReward(player, 16), null);
 });
 
-test('refreshing a page preserves code, name, gift assignments and opened envelopes', () => {
+test('refreshing a page preserves the single received prize', () => {
   let player = { ...createPlayerSession('LM-2027-8F2K'), name: 'Nguyễn Minh Anh' };
   player = openPlayerEnvelope(openPlayerEnvelope(player, 2), 12);
   const restored = restorePlayerSession(JSON.stringify(player));
   assert.deepEqual(restored, player);
-  assert.deepEqual(getPlayerReward(restored, 12), getPlayerReward(player, 12));
+  assert.deepEqual(restored.opened, [2]);
+  assert.deepEqual(getPlayerReward(restored, 2), getPlayerReward(player, 2));
 });
 
 test('submitting the same code preserves progress and a new code starts a new tree', () => {
@@ -38,13 +41,13 @@ test('submitting the same code preserves progress and a new code starts a new tr
   assert.deepEqual(next.opened, []);
 });
 
-test('corrupt storage is rejected and duplicate history entries are normalized', () => {
+test('corrupt storage is rejected and legacy reward history is limited to the first choice', () => {
   for (const value of [null, '', '{', '{}', '[]', JSON.stringify({ code: 'invalid' })]) {
     assert.equal(restorePlayerSession(value), null);
   }
   const player = createPlayerSession('LM-2027-8F2K');
   player.opened = [2, 2, -1, 18, '4', 9];
-  assert.deepEqual(restorePlayerSession(JSON.stringify(player)).opened, [2, 9]);
+  assert.deepEqual(restorePlayerSession(JSON.stringify(player)).opened, [2]);
   player.gifts[1] = 100;
   assert.equal(restorePlayerSession(JSON.stringify(player)), null);
 });

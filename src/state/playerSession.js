@@ -29,18 +29,23 @@ export function restorePlayerSession(raw) {
       code: saved.code.trim().toUpperCase(),
       name: saved.name.trim().slice(0, 60),
       gifts: [...saved.gifts],
-      opened: [...new Set(saved.opened.filter(index => Number.isInteger(index) && index >= 0 && index < saved.gifts.length))]
+      opened: [...new Set(saved.opened.filter(index => Number.isInteger(index) && index >= 0 && index < saved.gifts.length))].slice(0, 1)
     };
   } catch { return null; }
 }
 
 export function openPlayerEnvelope(session, index) {
-  if (!Number.isInteger(index) || index < 0 || index >= session.gifts.length || session.opened.includes(index)) return session;
+  if (!Number.isInteger(index) || index < 0 || index >= session.gifts.length || session.opened.length > 0) return session;
   return { ...session, opened: [...session.opened, index] };
 }
 
 export function getPlayerReward(session, index) {
-  if (!Number.isInteger(index) || index < 0 || index >= session.gifts.length) return null;
+  if (Array.isArray(session.rewards)) {
+    const reward = session.rewards.find(item => item.index === index);
+    if (!reward || !Number.isInteger(index) || index < 0 || index >= ENVELOPE_ANCHORS.length) return null;
+    return { ...reward, style: ENVELOPE_STYLES[index % ENVELOPE_STYLES.length] };
+  }
+  if (!Number.isInteger(index) || index < 0 || index >= session.gifts.length || session.opened[0] !== index) return null;
   return {
     index,
     number: index + 1,
