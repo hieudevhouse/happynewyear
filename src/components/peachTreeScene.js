@@ -500,7 +500,7 @@ export function animatePeachTree(model, time, delta, { reducedMotion = false } =
   if (model.opening) {
     const opening = model.opening;
     opening.elapsed += delta;
-    const progress = THREE.MathUtils.clamp(opening.elapsed / 1.6, 0, 1);
+    const progress = THREE.MathUtils.clamp(opening.elapsed / 2.1, 0, 1);
     const ease = 1 - Math.pow(1 - progress, 3);
     const envelope = model.envelopes[opening.index];
     envelope.pivot.position.copy(envelope.home).lerp(new THREE.Vector3(0, 2.65, 4.5), ease);
@@ -666,7 +666,7 @@ export function mountPeachTree(host, targets, { onReady, onError, onOpened, open
     });
     renderer.render(scene, camera);
     if (!reported) { reported = true; onReady?.(); }
-    if (model.opening?.elapsed >= 2.15 && !model.opening.complete) {
+    if (model.opening?.elapsed >= 2.65 && !model.opening.complete) {
       model.opening.complete = true;
       const index = finishPeachTreeOpening(model);
       onOpened?.(index);

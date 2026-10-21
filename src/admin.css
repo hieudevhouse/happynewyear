@@ -169,6 +169,44 @@
 .lma-winner-code svg { flex: none; }
 .lma-winner-card time { display: block; margin-top: 6px; color: var(--lma-muted); font-size: 10px; }
 
+.lma-field-note { color: var(--lma-muted); font-size: 11px; font-weight: 400; line-height: 1.6; }
+.lma-payout-editor { grid-column: 1 / -1; padding: 20px; border: 1px solid #e5d0a5; border-radius: 12px; background: #fff7df; }
+.lma-payout-editor h3 { margin: 0; color: #6e401b; font: 600 18px/1.4 'Playfair Display', Georgia, serif; }
+.lma-payout-editor > div > p { margin: 7px 0 17px; max-width: 700px; color: #7a603f; font-size: 12px; line-height: 1.7; }
+.lma-qr-upload-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.lma-qr-uploader { min-width: 0; padding: 16px; border: 1px solid #e5d3b3; border-radius: 10px; background: #fffdf7; }
+.lma-qr-uploader-heading { display: flex; align-items: center; gap: 9px; margin-bottom: 13px; }
+.lma-qr-uploader-heading h4 { margin: 0; color: #624425; font-size: 13px; }
+.lma-wallet-mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: #b21871; color: #fff; font-size: 17px; font-weight: 700; }
+.lma-qr-zalopay .lma-wallet-mark { background: #1274bd; }
+.lma-qr-preview { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; height: 190px; margin-bottom: 13px; border: 1px dashed #d8bd88; border-radius: 8px; background: #fbf2dc; color: #a17b3b; overflow: hidden; }
+.lma-qr-preview > span { font-size: 11px; }
+.lma-qr-preview.has-image { background: #fff; border-style: solid; }
+.lma-qr-preview > img { width: 100%; height: 100%; object-fit: contain; padding: 9px; }
+.lma-qr-uploading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: #fff8e4e8; color: #805623; font-size: 12px; }
+.lma-qr-upload-actions { display: flex; gap: 5px; align-items: center; margin-bottom: 8px; }
+.lma-qr-upload-actions > .lma-secondary { flex: 1; }
+.lma-qr-error { margin: 8px 0 0; color: #9b3028; font-size: 11px; line-height: 1.6; overflow-wrap: anywhere; }
+.lma-qr-save-note { display: block; margin-top: 7px; color: #4b703d; font-size: 10px; }
+.lma-cash-amount { display: block; margin: 0 0 9px; color: #a47116; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.lma-prize-qr-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+.lma-prize-qr-tags > span { display: inline-flex; align-items: center; gap: 4px; padding: 5px 7px; color: #8d7b62; border-radius: 6px; background: #f6f0e7; font-size: 10px; }
+.lma-prize-qr-tags > .is-ready { color: #716025; background: #fbefd0; }
+.lma-winner-content { flex: 1; }
+.lma-winner-content > .lma-cash-amount { margin: 5px 0 0; font-size: 15px; }
+.lma-redemption { margin-top: 15px; padding-top: 13px; border-top: 1px solid #eadcc6; }
+.lma-redemption-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; color: #75522c; font-size: 11px; font-weight: 600; }
+.lma-redemption > small { display: block; margin-top: 7px; color: var(--lma-muted); font-size: 10px; }
+.lma-winner-card .lma-redemption-note { display: block; margin: 8px 0 0; color: #8d7252; font-size: 11px; line-height: 1.65; }
+.lma-bank-qr { margin-top: 11px; }
+.lma-bank-qr summary { display: flex; align-items: center; gap: 6px; width: fit-content; min-height: 32px; color: #916020; font-size: 11px; font-weight: 600; cursor: pointer; }
+.lma-bank-qr summary:focus-visible { outline: 3px solid #ad6b0f; outline-offset: 3px; border-radius: 3px; }
+.lma-bank-qr[open] summary { margin-bottom: 8px; }
+.lma-qr-image-link { display: flex; align-items: center; justify-content: center; width: min(210px, 100%); height: 210px; padding: 8px; border: 1px solid #e2d2b4; border-radius: 8px; background: #fff; }
+.lma-qr-image-link img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.lm-admin .lma-qr-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 7px; color: #8d5e20; font-size: 11px; text-decoration: underline; }
+.lma-paid-button { margin-top: 11px; min-height: 36px; padding: 8px 11px; font-size: 11px; }
+
 .lma-loading, .lma-load-error, .lma-empty { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 250px; padding: 30px 20px; color: var(--lma-muted); text-align: center; }
 .lma-empty, .lma-load-error { flex-direction: column; }
 .lma-empty > svg { color: #ad824a; }
@@ -316,6 +354,9 @@
   .lma-login-card { padding: 28px 23px 24px; }
   .lma-login-card h1 { font-size: 27px; }
   .lma-login-card .lma-brand { margin-bottom: 24px; }
+  .lma-payout-editor { padding: 15px; }
+  .lma-qr-upload-grid { grid-template-columns: 1fr; gap: 12px; }
+  .lma-qr-preview { height: 180px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

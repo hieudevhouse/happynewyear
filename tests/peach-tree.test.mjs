@@ -65,9 +65,12 @@ test('opening locks the chosen packet and animates it to the center', () => {
     assert.equal(beginPeachTreeOpening(model, .5), false);
     assert.equal(beginPeachTreeOpening(model, 7), true);
     assert.equal(beginPeachTreeOpening(model, 8), false);
-    for (let frame = 0; frame < 150; frame++) animatePeachTree(model, frame / 60, 1 / 60);
+    for (let frame = 0; frame < 96; frame++) animatePeachTree(model, frame / 60, 1 / 60);
+    assert.ok(model.envelopes[7].flap.rotation.x > -Math.PI * .85,
+      'the flap should still be opening at the previous 1.6-second duration');
+    for (let frame = 96; frame < 180; frame++) animatePeachTree(model, frame / 60, 1 / 60);
     assert.equal(model.opening.index, 7);
-    assert.ok(model.opening.elapsed >= 2.15);
+    assert.ok(model.opening.elapsed >= 2.65);
     assert.ok(model.envelopes[7].flap.rotation.x < -2);
     model.root.updateMatrixWorld(true);
     const center = model.envelopes[7].packet.getWorldPosition(new THREE.Vector3());

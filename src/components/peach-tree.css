@@ -126,7 +126,7 @@
 .peach-illustrated-packet { position: relative; width: 1.8rem; height: 2.6rem; border: 1px solid var(--packet-gold); border-radius: 2px 2px 5px 5px; background: var(--packet-color); box-shadow: 0 .25rem .5rem #17050d44; }
 .peach-illustrated-packet::before { content: ''; position: absolute; bottom: 100%; left: 50%; width: 1px; height: 1rem; background: var(--packet-gold); }
 .peach-illustrated-packet em { position: absolute; inset: 0; display: grid; place-items: center; color: var(--packet-gold); font: 1.2rem serif; }
-.is-opening .is-illustrated .peach-envelope-hit.is-selected { animation: peach-envelope-open 1.4s ease both; }
+.is-opening .is-illustrated .peach-envelope-hit.is-selected { animation: peach-envelope-open 1.9s ease both; }
 
 .lucky-prize-slot {
   position: relative;
@@ -135,11 +135,11 @@
   width: min(calc(100% - 2rem), 35rem);
   margin: 0 auto 1rem;
   padding: 1rem 1.25rem .8rem;
-  border: 1px solid #d9b471;
+  border: 1px solid #b67a28;
   border-top: 3px solid #932b37;
   border-radius: 1.25rem;
-  background: radial-gradient(ellipse at 12% 10%, #fff, transparent 65%), #fff7e7;
-  box-shadow: 0 .75rem 2.75rem #24462426, 0 2px 0 #fff4cf inset;
+  background: radial-gradient(ellipse at 12% 10%, #ffe481, transparent 65%), linear-gradient(135deg, #f8d15a, #e6ad2c);
+  box-shadow: 0 .75rem 2.75rem #24462426, 0 2px 0 #ffe99a inset;
   animation: peach-reward-in .4s ease both;
 }
 
@@ -147,7 +147,7 @@
   content: '';
   position: absolute;
   inset: .3rem;
-  border: 1px solid #d9b47140;
+  border: 1px solid #ad772d4d;
   border-radius: .95rem;
   pointer-events: none;
 }
@@ -162,8 +162,8 @@
 }
 
 .lucky-prize-topline h2 { margin: 0; color: #7e2935; font: 600 .95rem 'Playfair Display', Georgia, serif; }
-.lucky-prize-status { display: inline-flex; align-items: center; gap: .3rem; padding: .3rem .55rem; border: 1px solid #d9b47166; border-radius: 2rem; background: #fff1d2; color: #855326; font-size: .625rem; font-weight: 600; line-height: 1.2; }
-.is-complete .lucky-prize-status { background: #f8e9d6; color: #7c3435; }
+.lucky-prize-status { display: inline-flex; align-items: center; gap: .3rem; padding: .3rem .55rem; border: 1px solid #b98039aa; border-radius: 2rem; background: #f8dc7d; color: #754626; font-size: .625rem; font-weight: 600; line-height: 1.2; }
+.is-complete .lucky-prize-status { background: #f7d06a; color: #7c3435; }
 
 .lucky-prize-card {
   display: grid;
@@ -182,26 +182,28 @@
 
 .lucky-prize-card:focus-visible { outline: 2px solid #8f2935; outline-offset: 6px; }
 .lucky-prize-emblem { position: relative; display: grid; place-items: center; width: 3.75rem; aspect-ratio: 1; border: 1px solid #edce97; border-radius: 1rem; background: linear-gradient(145deg, #a83942, #721f30); box-shadow: 0 .3rem .8rem #8d323222, inset 0 0 0 4px #ffffff0d; color: #ffe2a7; font-size: 2rem; }
-.lucky-prize-emblem::after { content: '✦'; position: absolute; right: -.3rem; bottom: -.35rem; width: 1.25rem; height: 1.25rem; display: grid; place-items: center; border: 1px solid #e7c78b; border-radius: 50%; background: #fff4d8; color: #ae7329; font-size: .75rem; }
+.lucky-prize-emblem::after { content: '✦'; position: absolute; right: -.3rem; bottom: -.35rem; width: 1.25rem; height: 1.25rem; display: grid; place-items: center; border: 1px solid #b47a31; border-radius: 50%; background: #f8dc76; color: #8c4d23; font-size: .75rem; }
 .lucky-prize-copy { display: block; min-width: 0; }
-.lucky-prize-eyebrow { display: block; margin-bottom: .35rem; color: #9a6b39; font-size: .5625rem; font-weight: 700; letter-spacing: .1em; line-height: 1.5; }
+.lucky-prize-eyebrow { display: block; margin-bottom: .35rem; color: #7c4c22; font-size: .5625rem; font-weight: 700; letter-spacing: .1em; line-height: 1.5; }
 .lucky-prize-title { display: block; color: #7a2533; font: 600 clamp(1.125rem, 3.5vw, 1.5rem)/1.2 'Playfair Display', Georgia, serif; letter-spacing: -.02em; overflow-wrap: anywhere; text-wrap: balance; }
-.lucky-prize-description { display: block; margin-top: .4rem; color: #846451; font-size: .6875rem; line-height: 1.6; overflow-wrap: anywhere; }
-.lucky-prize-view { display: grid; place-items: center; width: 2rem; aspect-ratio: 1; border: 1px solid #dcb983; border-radius: 50%; color: #8d2e36; background: #fff4db; transition: background .2s ease, transform .2s ease; }
+.lucky-prize-cash { display: block; margin-top: .3rem; color: #812235; font-size: 1.125rem; font-weight: 800; line-height: 1.3; }
+.lucky-prize-description { display: block; margin-top: .4rem; color: #71502b; font-size: .6875rem; line-height: 1.6; overflow-wrap: anywhere; }
+.lucky-prize-view { display: grid; place-items: center; width: 2rem; aspect-ratio: 1; border: 1px solid #b78033; border-radius: 50%; color: #8d2e36; background: #f8dc7d; transition: background .2s ease, transform .2s ease; }
 button.lucky-prize-card:hover .lucky-prize-view { background: #f2d49f; transform: translate(1px, -1px); }
-.lucky-prize-note { margin: .85rem 0 0; padding-top: .65rem; border-top: 1px dashed #d8b88d80; color: #8a6b52; text-align: center; font-size: .625rem; line-height: 1.55; overflow-wrap: anywhere; }
+.lucky-prize-note { margin: .85rem 0 0; padding-top: .65rem; border-top: 1px dashed #a8733180; color: #75532e; text-align: center; font-size: .625rem; line-height: 1.55; overflow-wrap: anywhere; }
 .lucky-prize-note.has-error { color: #a52833; }
 
 .lucky-reward-dialog {
-  width: min(90%, 26rem);
+  width: min(94%, 32rem);
   max-height: 90svh;
   overflow-y: auto;
-  padding: clamp(1.75rem, 6vw, 3rem) clamp(1.25rem, 5vw, 2.5rem) 1.75rem;
-  border: 1px solid #efd19c66;
+  overscroll-behavior: contain;
+  padding: clamp(1.75rem, 6vw, 2.25rem) clamp(1rem, 4vw, 1.75rem) 1.5rem;
+  border: 1px solid #f9e092;
   border-radius: 1.5rem;
-  background: radial-gradient(circle at 50% 10%, #ab4a49, #632330 50%, #391321);
-  box-shadow: 0 2rem 7rem #16040dbb, inset 0 1px 0 #ffeaca22;
-  color: #fff2da;
+  background: radial-gradient(circle at 50% 4%, #ffe68c, transparent 44%), linear-gradient(145deg, #f4ce57, #e3ac2c);
+  box-shadow: 0 2rem 7rem #16040dbb, inset 0 1px 0 #ffe9a3;
+  color: #722637;
   text-align: center;
   animation: peach-reward-in .45s cubic-bezier(.2,.8,.2,1) both;
 }
@@ -218,27 +220,29 @@ button.lucky-prize-card:hover .lucky-prize-view { background: #f2d49f; transform
   height: 2.75rem;
   border-radius: 50%;
   background: transparent;
-  color: #f7d4b0;
+  color: #7d2a37;
 }
 
-.lucky-reward-close:hover { background: #ffe3b710; }
-.lucky-reward-emblem { display: grid; place-items: center; width: 6rem; aspect-ratio: 1; margin: .5rem auto 1.5rem; border: 1px solid #f3d5a144; border-radius: 50%; background: radial-gradient(circle, #fbd7a633, #fbd7a608 70%); box-shadow: 0 0 3rem #fbd7a61a; font-size: 3rem; }
-.lucky-reward-kicker { margin: 0 0 .75rem; color: #e6bf8e; font-size: .625rem; letter-spacing: .2em; }
+.lucky-reward-close:hover { background: #b7802826; }
+.lucky-reward-close:focus-visible, .lucky-reward-return:focus-visible { outline-color: #752638; }
+.lucky-reward-emblem { display: grid; place-items: center; width: 4.75rem; aspect-ratio: 1; margin: .25rem auto 1rem; border: 1px solid #b77b2a88; border-radius: 50%; background: radial-gradient(circle, #ffed9c, #eebd4155 70%); box-shadow: 0 0 3rem #ffe88444; font-size: 2.5rem; }
+.lucky-reward-kicker { margin: 0 0 .75rem; color: #874f25; font-size: .625rem; font-weight: 700; letter-spacing: .2em; }
 .lucky-reward-dialog h2 { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif; font-size: clamp(1.65rem, 6vw, 2.1rem); line-height: 1.2; letter-spacing: -.03em; overflow-wrap: anywhere; text-wrap: balance; }
-.lucky-reward-message { margin: 1rem 0; color: #e2bfae; font-size: .875rem; line-height: 1.7; }
-.lucky-reward-source { display: block; color: #c4a18b; font-size: .6875rem; line-height: 1.7; }
-.lucky-reward-saved { margin: 1rem 0 0; color: #e8cda7; font-size: .6875rem; line-height: 1.7; }
-.lucky-reward-saved span { color: #f4d38b; }
+.lucky-reward-amount { margin: .65rem 0 0; color: #8c2938; font-size: clamp(1.7rem, 7vw, 2.5rem); font-weight: 800; letter-spacing: -.04em; line-height: 1.2; }
+.lucky-reward-message { margin: .75rem 0; color: #76502a; font-size: .875rem; line-height: 1.7; }
+.lucky-reward-source { display: block; color: #78552c; font-size: .6875rem; line-height: 1.7; }
+.lucky-reward-saved { margin: .65rem 0 0; color: #76552d; font-size: .6875rem; line-height: 1.7; }
+.lucky-reward-saved span { color: #6e5c22; }
 
 .lucky-reward-return {
   width: 100%;
   min-height: 3.25rem;
-  margin-top: 1.75rem;
+  margin-top: 1rem;
   padding: .75rem 1rem;
-  border: 1px solid #ffe6ba44;
+  border: 1px solid #a76c29;
   border-radius: .8rem;
-  background: linear-gradient(125deg, #f2d2a0, #d9a568);
-  color: #52232a;
+  background: linear-gradient(125deg, #f6da78, #e8b63c);
+  color: #752838;
   font-weight: 700;
   font-size: .875rem;
 }

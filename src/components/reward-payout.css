@@ -1,0 +1,66 @@
+.reward-payout { margin-top: 1.4rem; padding: 1.15rem; border: 1px solid #a76b22a6; border-radius: 1.15rem; background: linear-gradient(140deg, #f8d668bd, #edb72f75); box-shadow: 0 1px 0 #fff1a37d inset; text-align: left; }
+.reward-payout-heading { display: flex; align-items: center; gap: .7rem; margin-bottom: 1rem; }
+.reward-payout-symbol { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; flex: 0 0 auto; border: 1px solid #8d2e3e33; border-radius: .75rem; color: #8a2436; background: #f4c84f; }
+.reward-payout-heading h3 { margin: 0; color: #702338; font-size: 1rem; font-weight: 800; }
+.reward-payout-heading p { margin: .2rem 0 0; color: #775222; font-size: .7rem; line-height: 1.5; }
+.reward-methods { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .45rem; min-width: 0; margin: 0; padding: 0; border: 0; }
+.reward-method { position: relative; display: flex; flex-direction: column; align-items: center; gap: .35rem; padding: .75rem .25rem; border: 1px solid #b88837b8; border-radius: .8rem; background: #edc15170; color: #754023; text-align: center; cursor: pointer; transition: border-color .15s ease, background .15s ease; }
+.reward-method.is-selected { border-color: #8c283c; background: #fbe28f; box-shadow: 0 0 0 1px #8c283c inset; }
+.reward-method:hover { background: #f9d875; }
+.reward-method input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.reward-method:has(input:focus-visible) { outline: 2px solid #7b2634; outline-offset: 3px; }
+.reward-method:has(input:disabled) { cursor: not-allowed; opacity: .55; }
+.reward-method input:disabled { cursor: not-allowed; }
+.reward-method-confirmation { margin: .65rem 0 .2rem; color: #76502a; font-size: .68rem; line-height: 1.6; }
+.reward-method-mark { display: grid; place-items: center; width: 2.1rem; height: 2.1rem; border-radius: .65rem; font-size: 1rem; font-weight: 900; color: #fff5d5; background: #a52861; }
+.reward-method-mark.is-zalopay { background: #126eb0; }
+.reward-method-mark.is-bank { color: #fff0b0; background: #8a3335; font-size: .7rem; letter-spacing: -.04em; }
+.reward-method-name { color: #6f2831; font-size: .72rem; font-weight: 800; }
+.reward-method-hint { color: #7a5528; font-size: .57rem; line-height: 1.4; }
+.reward-method-check { position: absolute; top: .35rem; right: .35rem; color: #8c283c; }
+.reward-payout-detail { margin-top: .9rem; }
+.reward-qr-countdown { display: flex; align-items: flex-start; justify-content: center; gap: .65rem; margin: .75rem 0 1rem; padding: .85rem; border: 1px solid #a26b32; border-radius: .8rem; color: #792c35; background: #fbe093; }
+.reward-qr-countdown svg { flex: 0 0 auto; margin-top: .1rem; }
+.reward-qr-countdown span, .reward-qr-countdown small { display: block; font-size: .67rem; line-height: 1.6; color: #76502a; }
+.reward-qr-countdown strong { display: block; margin: .15rem 0; color: #782938; font-size: clamp(1.05rem, 4vw, 1.4rem); font-variant-numeric: tabular-nums; letter-spacing: .03em; }
+.reward-payout-unavailable.is-expired { padding: 1rem .75rem; border: 1px dashed #a56536; border-radius: .8rem; background: #f4cd6c; }
+.reward-payout-detail-title { margin: 0 0 .7rem; color: #702638; font-size: .8rem; font-weight: 800; text-align: center; }
+.reward-payout-instructions { margin: .7rem 0; color: #714b22; font-size: .75rem; line-height: 1.7; }
+.reward-qr-image { width: min(100%, 17rem); margin: .8rem auto; padding: .65rem; border: 1px solid #b77f32; border-radius: .75rem; background: #fff; box-shadow: 0 .25rem .8rem #7a45231a; }
+.reward-qr-image img { display: block; width: 100%; max-height: 23rem; object-fit: contain; border-radius: .3rem; }
+.reward-qr-link { display: block; width: fit-content; margin: .8rem auto; color: #7f2237; font-size: .75rem; font-weight: 700; text-decoration: underline; text-underline-offset: .18em; }
+.reward-payout-footnote { margin: .7rem 0 0; padding-top: .65rem; border-top: 1px dashed #ad7b3399; color: #79572e; font-size: .65rem; line-height: 1.65; }
+.reward-payout-placeholder { display: flex; flex-direction: column; align-items: center; gap: .6rem; padding: 1.25rem; border: 1px dashed #a06b2f; border-radius: .8rem; color: #8d3b32; background: #f7d975; }
+.reward-payout-placeholder span { font-size: .75rem; }
+.reward-payout-submit, .reward-payout-secondary, .reward-payout-remove { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: 2.7rem; padding: .65rem .85rem; border: 1px solid transparent; border-radius: .65rem; font: inherit; font-size: .75rem; font-weight: 700; cursor: pointer; }
+.reward-payout-submit { width: 100%; margin-top: .25rem; border-color: #702032; color: #ffeba6; background: linear-gradient(140deg, #9c3441, #752133); box-shadow: 0 .2rem .6rem #69273620; }
+.reward-payout-submit:hover:enabled { background: #7c2335; }
+.reward-payout-secondary { border-color: #af763a; color: #782938; background: #f6d573; }
+.reward-payout-secondary:hover:enabled { background: #fbe193; }
+.reward-payout-remove { color: #8b2a34; background: transparent; }
+.reward-payout-remove:hover:enabled { background: #e8b553; }
+.reward-payout button:disabled { cursor: not-allowed; opacity: .65; }
+.reward-payout button:focus-visible, .reward-qr-link:focus-visible, .reward-payout input[type=file]:focus-visible + * { outline: 2px solid #752738; outline-offset: 3px; }
+.reward-payout-unavailable { display: flex; flex-direction: column; align-items: center; padding: .7rem .2rem 0; color: #8b4a2b; text-align: center; }
+.reward-payout-unavailable strong { margin-top: .7rem; color: #7b2a36; font-size: .8rem; }
+.reward-payout-unavailable p { font-size: .75rem; line-height: 1.65; }
+.reward-upload-dropzone { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: .55rem; width: 100%; min-height: 8.25rem; padding: 1.1rem; border: 1px dashed #97602d; border-radius: .8rem; color: #7d2e35; background: #f8d876; cursor: pointer; }
+.reward-upload-dropzone strong { font-size: .8rem; }
+.reward-upload-dropzone span { color: #805728; font-size: .7rem; }
+.reward-upload-dropzone:hover:enabled { background: #fce18b; }
+.reward-bank-actions { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .4rem; }
+.reward-payout-file-help { margin: .65rem 0; color: #79552b; font-size: .65rem; line-height: 1.6; }
+.reward-payout-status { display: flex; align-items: flex-start; gap: .6rem; margin-top: .8rem; padding: .85rem; border: 1px solid #8e6b2b80; border-radius: .8rem; color: #5f5625; background: #edcb649e; }
+.reward-payout-status svg { flex: 0 0 auto; margin-top: .05rem; color: #6b5b21; }
+.reward-payout-status strong { display: block; color: #634829; font-size: .78rem; line-height: 1.5; }
+.reward-payout-status p { margin: .25rem 0 0; color: #72532e; font-size: .7rem; line-height: 1.6; }
+.reward-payout-status.is-paid { border-color: #64733480; background: #d5c86099; }
+.reward-payout-status.is-paid svg { color: #4b622b; }
+.reward-payout-error { margin: .8rem 0 0; padding: .7rem .8rem; border: 1px solid #af3c3f66; border-radius: .65rem; color: #842534; background: #efb75d80; font-size: .75rem; line-height: 1.65; }
+.reward-payout-upload-status { display: flex; align-items: center; justify-content: center; gap: .4rem; margin: .7rem 0; color: #79502b; font-size: .7rem; }
+.reward-payout-refresh { display: flex; align-items: center; justify-content: center; gap: .35rem; margin: .8rem auto 0; min-height: 2.5rem; padding: .4rem .6rem; border: 0; border-radius: .5rem; color: #782938; background: transparent; font-size: .67rem; text-decoration: underline; text-underline-offset: .15em; }
+.reward-payout-refresh:hover:enabled { background: #f6d573; }
+.reward-payout-spinner { animation: reward-payout-spin .8s linear infinite; }
+@keyframes reward-payout-spin { to { transform: rotate(360deg); } }
+@media (max-width: 25rem) { .reward-payout { padding: .85rem; } .reward-methods { gap: .3rem; } .reward-method-hint { font-size: .53rem; } }
+@media (prefers-reduced-motion: reduce) { .reward-method { transition: none; } .reward-payout-spinner { animation: none; } }

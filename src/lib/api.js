@@ -1,4 +1,6 @@
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '');
+import { getMonotonicNow, syncServerClock } from './serverClock.js';
+
+const API_BASE = (import.meta.env?.VITE_API_BASE_URL || '/api').replace(/\/$/, '');
 
 export class ApiError extends Error {
   constructor(message, status = 0, details = null) {
@@ -9,14 +11,15 @@ export class ApiError extends Error {
   }
 }
 
-export async function api(path, { method = 'GET', body, signal, ...options } = {}) {
+export async function api(path, { method = 'GET', body, signal, timeoutMs = 20000, ...options } = {}) {
   method = method.toUpperCase();
   const payload = body === undefined && ['POST', 'PATCH', 'PUT', 'DELETE'].includes(method) ? {} : body;
   const controller = new AbortController();
   const abort = () => controller.abort(signal?.reason);
   if (signal?.aborted) abort();
   else signal?.addEventListener('abort', abort, { once: true });
-  const timeout = setTimeout(() => controller.abort(new Error('Request timed out')), 20000);
+  const timeout = setTimeout(() => controller.abort(new Error('Request timed out')), timeoutMs);
+  const requestStartedAt = getMonotonicNow();
   try {
     const response = await fetch(`${API_BASE}${path}`, {
       ...options,
@@ -26,6 +29,7 @@ export async function api(path, { method = 'GET', body, signal, ...options } = {
       body: payload === undefined ? undefined : JSON.stringify(payload),
       signal: controller.signal
     });
+    syncServerClock(response.headers.get('date'), { requestStartedAt, responseReceivedAt: getMonotonicNow() });
     const contentType = response.headers.get('content-type') || '';
     const data = contentType.includes('application/json') ? await response.json() : null;
     if (!response.ok) {

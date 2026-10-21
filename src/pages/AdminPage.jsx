@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Check, ChevronLeft, ChevronRight, Gift, LayoutDashboard, LogOut, Plus, RefreshCw, Search, Settings2, ShieldCheck, Ticket, Trash2, Users, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ChevronLeft, ChevronRight, ExternalLink, Gift, LayoutDashboard, LogOut, Plus, QrCode, RefreshCw, Search, Settings2, ShieldCheck, Ticket, Trash2, Upload, Users, X } from 'lucide-react';
 import Logo from '../components/Logo';
 import { useAdmin } from '../state/AdminContext';
 import { api } from '../lib/api';
+import { uploadQr } from '../lib/qrUpload';
 import '../admin.css';
 
 const NAV = [
@@ -153,40 +154,148 @@ function Winners() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [query, setQuery] = useState('');
+  const [pending, setPending] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
   const resource = useResource(`/admin/winners?search=${encodeURIComponent(query)}&page=${page}&limit=20`);
   const items = resource.data?.items || [];
-  return <><div className="lma-section-heading"><div><h2>Niềm vui được trao đi</h2><p>Tra cứu người nhận, mã quay và từng phần quà đã mở.</p></div><button className="lma-button lma-secondary" onClick={resource.refresh}><RefreshCw size={16}/> Làm mới</button></div><section className="lma-panel"><form className="lma-filters" onSubmit={e => { e.preventDefault(); setQuery(search.trim()); setPage(1); }}><label className="lma-search"><Search size={18}/><span className="lma-sr-only">Tìm tên người nhận hoặc mã quay</span><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Tìm tên người nhận hoặc mã quay…"/><button type="submit" className="lma-button lma-secondary">Tìm</button></label></form><ResourceState {...resource}>{items.length ? <div className="lma-winner-grid">{items.map((item, index) => <article className="lma-winner-card" key={item.id || index}><span className="lma-winner-icon" style={{ backgroundColor: /^#[0-9a-f]{3,8}$/i.test(item.prize?.color || '') ? item.prize.color : undefined }} aria-hidden="true">{item.prize?.icon || '🧧'}</span><div><h3>{item.name}</h3><b>{item.prize?.title || 'Phần quà may mắn'}</b><p>{item.prize?.sub}</p><span className="lma-winner-code"><Ticket size={13}/>{item.code} · Bao {Number(item.index) + 1}</span><time dateTime={item.openedAt}>{dateTime(item.openedAt)}</time></div></article>)}</div> : <Empty icon={Users} title={query ? 'Không tìm thấy người nhận' : 'Chưa có người nhận lộc'}>{query ? 'Thử tìm bằng tên hoặc mã quay khác.' : 'Mỗi phần quà được mở sẽ được lưu lại tại đây.'}</Empty>}<Pagination data={resource.data} page={page} onChange={setPage}/></ResourceState></section></>;
+  async function markPaid(item) {
+    if (!item.codeId || pending) return;
+    setPending(item.codeId); setError(''); setMessage('');
+    try {
+      await api(`/admin/codes/${encodeURIComponent(item.codeId)}/redemption`, { method: 'PATCH', body: { status: 'paid', expectedQrPublicId: item.redemption?.recipientQr?.publicId } });
+      setMessage(`Đã ghi nhận chuyển tiền cho ${item.name}.`);
+      resource.refresh();
+    } catch (cause) { setError(cause.message || 'Không thể cập nhật trạng thái chuyển tiền.'); }
+    finally { setPending(''); }
+  }
+  return <>
+    <div className="lma-section-heading"><div><h2>Niềm vui được trao đi</h2><p>Tra cứu người nhận, phần quà và phương thức nhận tiền lì xì.</p></div><button className="lma-button lma-secondary" onClick={resource.refresh} disabled={!!pending}><RefreshCw size={16}/> Làm mới</button></div>
+    {message && <p className="lma-message lma-success" role="status"><Check size={17}/>{message}</p>}
+    {error && <p className="lma-message lma-error" role="alert">{error}</p>}
+    <section className="lma-panel">
+      <form className="lma-filters" onSubmit={e => { e.preventDefault(); setQuery(search.trim()); setPage(1); }}><label className="lma-search"><Search size={18}/><span className="lma-sr-only">Tìm tên người nhận hoặc mã quay</span><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Tìm tên người nhận hoặc mã quay…"/><button type="submit" className="lma-button lma-secondary">Tìm</button></label></form>
+      <ResourceState {...resource}>{items.length ? <div className="lma-winner-grid">{items.map((item, index) => <article className="lma-winner-card" key={item.id || index}>
+        <span className="lma-winner-icon" style={{ backgroundColor: /^#[0-9a-f]{3,8}$/i.test(item.prize?.color || '') ? item.prize.color : undefined }} aria-hidden="true">{item.prize?.icon || '🧧'}</span>
+        <div className="lma-winner-content"><h3>{item.name}</h3><b>{item.prize?.title || 'Phần quà may mắn'}</b>{item.prize?.amount > 0 && <span className="lma-cash-amount">{number(item.prize.amount)} ₫</span>}<p>{item.prize?.sub}</p><span className="lma-winner-code"><Ticket size={13}/>{item.code} · Bao {Number(item.index) + 1}</span><time dateTime={item.openedAt}>{dateTime(item.openedAt)}</time>
+          <WinnerRedemption item={item} pending={pending} onMarkPaid={() => markPaid(item)}/>
+        </div>
+      </article>)}</div> : <Empty icon={Users} title={query ? 'Không tìm thấy người nhận' : 'Chưa có người nhận lộc'}>{query ? 'Thử tìm bằng tên hoặc mã quay khác.' : 'Mỗi phần quà được mở sẽ được lưu lại tại đây.'}</Empty>}<Pagination data={resource.data} page={page} onChange={setPage}/></ResourceState>
+    </section>
+  </>;
 }
 
-const NEW_PRIZE = { title: '', sub: '', icon: '🧧', color: '#ffc93c', weight: '1', active: true };
+function imageUrl(value) {
+  try { const url = new URL(value); return url.protocol === 'https:' ? url.href : ''; }
+  catch { return ''; }
+}
+
+function WinnerRedemption({ item, pending, onMarkPaid }) {
+  const redemption = item.redemption;
+  if (!redemption) return <div className="lma-redemption"><span className="lma-redemption-note">Chưa chọn cách nhận tiền</span></div>;
+  const methods = { momo: 'MoMo', zalopay: 'ZaloPay', bank: 'QR ngân hàng cá nhân' };
+  const status = redemption.status === 'paid' ? 'Đã chuyển tiền' : redemption.method === 'bank' ? 'Chưa chuyển tiền' : redemption.qrExpired ? 'QR đã hết hạn hiển thị' : 'Đã mở QR quà tặng';
+  const qrUrl = imageUrl(redemption.recipientQr?.url);
+  return <div className="lma-redemption">
+    <div className="lma-redemption-heading"><span>{methods[redemption.method] || 'Chưa chọn phương thức'}</span><span className={`lma-status ${redemption.status === 'paid' ? 'lma-status-available' : 'lma-status-active'}`}>{status}</span></div>
+    {redemption.requestedAt && <small>Yêu cầu: {dateTime(redemption.requestedAt)}</small>}
+    {redemption.qrExpiresAt && <small>Hạn hiển thị QR: {dateTime(redemption.qrExpiresAt)}</small>}
+    {redemption.method === 'bank' ? <>
+      {qrUrl ? <details className="lma-bank-qr"><summary><QrCode size={15}/> Xem QR nhận tiền</summary><div><a href={qrUrl} target="_blank" rel="noopener noreferrer" className="lma-qr-image-link" aria-label={`Mở QR ngân hàng của ${item.name}`}><img src={qrUrl} alt={`Mã QR ngân hàng do ${item.name} gửi`} loading="lazy"/></a><a className="lma-qr-link" href={qrUrl} target="_blank" rel="noopener noreferrer">Mở ảnh QR <ExternalLink size={13}/></a></div></details> : <span className="lma-redemption-note">Chưa có ảnh QR nhận tiền.</span>}
+      {redemption.status === 'pending' && item.codeId && qrUrl && <><p className="lma-redemption-note">Sau khi chuyển tiền bằng ứng dụng ngân hàng, bấm xác nhận bên dưới.</p><button className="lma-button lma-secondary lma-paid-button" disabled={!!pending} onClick={onMarkPaid}>{pending === item.codeId ? <span className="lma-spinner"/> : <Check size={15}/>} Đã chuyển tiền</button></>}
+      {redemption.paidAt && <small>Xác nhận: {dateTime(redemption.paidAt)}</small>}
+    </> : <p className="lma-redemption-note">Người nhận dùng ứng dụng để quét QR quà tặng. Trạng thái này chưa xác nhận tiền đã được nhận.</p>}
+  </div>;
+}
+
+const NEW_PRIZE = { title: '', sub: '', icon: '🧧', color: '#ffc93c', weight: '1', amount: '', active: true, payouts: { momo: null, zalopay: null } };
 
 function Prizes() {
   const resource = useResource('/admin/prizes');
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(NEW_PRIZE);
   const [pending, setPending] = useState(false);
+  const [uploads, setUploads] = useState({});
+  const [uploadErrors, setUploadErrors] = useState({});
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const editorRef = useRef(null);
+  const uploadControllers = useRef({});
   const items = resource.data?.items || [];
+  const busy = pending || Object.values(uploads).some(Boolean);
   const totalWeight = items.filter(item => item.active).reduce((total, item) => total + Number(item.weight || 0), 0);
+  useEffect(() => () => Object.values(uploadControllers.current).forEach(controller => controller.abort()), []);
   function edit(item) {
-    setEditing(item?.id || 'new'); setForm(item ? { title: item.title, sub: item.sub, icon: item.icon, color: item.color, weight: String(item.weight), active: item.active } : { ...NEW_PRIZE }); setError(''); setMessage('');
+    if (pending || Object.keys(uploadControllers.current).length) return;
+    setEditing(item?.id || 'new');
+    setForm(item ? { title: item.title, sub: item.sub, icon: item.icon, color: item.color, weight: String(item.weight), amount: Number(item.amount) > 0 ? String(item.amount) : '', active: item.active, payouts: { momo: item.payouts?.momo || null, zalopay: item.payouts?.zalopay || null } } : { ...NEW_PRIZE, payouts: { momo: null, zalopay: null } });
+    setError(''); setMessage(''); setUploadErrors({});
     requestAnimationFrame(() => editorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
   }
   async function submit(event) {
+    if (busy || Object.keys(uploadControllers.current).length) { event.preventDefault(); return; }
     event.preventDefault(); setPending(true); setError(''); setMessage('');
     try {
-      await api(editing === 'new' ? '/admin/prizes' : `/admin/prizes/${editing}`, { method: editing === 'new' ? 'POST' : 'PATCH', body: { ...form, title: form.title.trim(), sub: form.sub.trim(), icon: form.icon.trim(), weight: Number(form.weight) } });
+      await api(editing === 'new' ? '/admin/prizes' : `/admin/prizes/${editing}`, { method: editing === 'new' ? 'POST' : 'PATCH', body: { ...form, title: form.title.trim(), sub: form.sub.trim(), icon: form.icon.trim(), weight: Number(form.weight), amount: form.amount === '' ? null : Number(form.amount) } });
       setMessage(editing === 'new' ? 'Đã thêm phần quà mới.' : 'Đã lưu thông tin phần quà.'); setEditing(null); resource.refresh();
     } catch (cause) { setError(cause.message || 'Không thể lưu phần quà.'); }
     finally { setPending(false); }
   }
   function update(field, value) { setForm(current => ({ ...current, [field]: value })); }
+  async function upload(method, file) {
+    if (!file || pending || uploadControllers.current[method]) return;
+    const controller = new AbortController();
+    uploadControllers.current[method] = controller;
+    setUploads(current => ({ ...current, [method]: true }));
+    setUploadErrors(current => ({ ...current, [method]: '' }));
+    try {
+      const qr = await uploadQr(file, { role: 'admin', signal: controller.signal });
+      if (!controller.signal.aborted) setForm(current => ({ ...current, payouts: { ...current.payouts, [method]: qr } }));
+    } catch (cause) {
+      if (!controller.signal.aborted) setUploadErrors(current => ({ ...current, [method]: cause.message || 'Không thể tải ảnh QR. Vui lòng thử lại.' }));
+    } finally {
+      delete uploadControllers.current[method];
+      if (!controller.signal.aborted) setUploads(current => ({ ...current, [method]: false }));
+    }
+  }
+  function removeQr(method) {
+    setForm(current => ({ ...current, payouts: { ...current.payouts, [method]: null } }));
+    setUploadErrors(current => ({ ...current, [method]: '' }));
+  }
   return <>
-    <div className="lma-section-heading"><div><h2>Những món quà đầu xuân</h2><p>Quản lý nội dung và tỷ trọng xuất hiện của từng phần quà.</p></div><button className="lma-button lma-primary" onClick={() => edit(null)} disabled={pending}><Plus size={17}/> Thêm phần quà</button></div>
+    <div className="lma-section-heading"><div><h2>Những món quà đầu xuân</h2><p>Đặt số tiền lì xì và QR quà tặng MoMo, ZaloPay cho từng phần quà.</p></div><button className="lma-button lma-primary" onClick={() => edit(null)} disabled={busy}><Plus size={17}/> Thêm phần quà</button></div>
     {message && <p className="lma-message lma-success" role="status"><Check size={17}/>{message}</p>}
-    {editing && <section className="lma-panel lma-form-panel" ref={editorRef}><div className="lma-panel-heading"><h2>{editing === 'new' ? 'Thêm phần quà' : 'Chỉnh sửa phần quà'}</h2><button className="lma-button lma-icon-button" aria-label="Đóng chỉnh sửa" onClick={() => setEditing(null)} disabled={pending}><X size={19}/></button></div><form className="lma-prize-form" onSubmit={submit}><label className="lma-field">Tên phần quà<input value={form.title} onChange={e => update('title', e.target.value)} required maxLength={100} disabled={pending}/></label><label className="lma-field">Lời chúc<input value={form.sub} onChange={e => update('sub', e.target.value)} maxLength={200} disabled={pending}/></label><label className="lma-field">Biểu tượng<input value={form.icon} onChange={e => update('icon', e.target.value)} required maxLength={16} disabled={pending}/></label><label className="lma-field">Màu sắc<div className="lma-color-input"><input type="color" value={form.color} onChange={e => update('color', e.target.value)} disabled={pending}/><span>{form.color}</span></div></label><label className="lma-field">Tỷ trọng<input type="number" min="1" max="10000" step="1" value={form.weight} onChange={e => update('weight', e.target.value)} required disabled={pending}/></label><label className="lma-checkbox"><input type="checkbox" checked={form.active} onChange={e => update('active', e.target.checked)} disabled={pending}/><span>Cho phép xuất hiện khi nhận lộc</span></label><p className="lma-form-hint">Xác suất được tính theo tỷ trọng của phần quà trong tổng tỷ trọng đang bật. Tắt phần quà để tạm ngưng xuất hiện.</p>{error && <p className="lma-message lma-error" role="alert">{error}</p>}<div className="lma-form-actions"><button className="lma-button lma-primary" type="submit" disabled={pending}>{pending ? <span className="lma-spinner"/> : <Check size={17}/>} Lưu phần quà</button><button className="lma-button lma-secondary" type="button" onClick={() => setEditing(null)} disabled={pending}>Hủy</button></div></form></section>}
-    <ResourceState {...resource}>{items.length ? <div className="lma-prize-grid">{items.map(item => <article className="lma-prize-card" key={item.id}><div className="lma-prize-card-top"><span className="lma-prize-icon" style={{ backgroundColor: /^#[0-9a-f]{3,8}$/i.test(item.color || '') ? item.color : undefined }} aria-hidden="true">{item.icon}</span><span className={`lma-status ${item.active ? 'lma-status-available' : 'lma-status-disabled'}`}>{item.active ? 'Đang áp dụng' : 'Tạm ngưng'}</span></div><h3>{item.title}</h3><p>{item.sub}</p><div className="lma-prize-meta"><span>Tỷ trọng <b>{number(item.weight)}</b></span><span>Xác suất <b>{item.active && totalWeight ? new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 2 }).format(Number(item.weight) / totalWeight * 100) : '0'}%</b></span></div><button className="lma-button lma-secondary" onClick={() => edit(item)} disabled={pending}><Settings2 size={16}/> Chỉnh sửa</button></article>)}</div> : <Empty icon={Gift} title="Chưa có phần quà">Thêm phần quà để bắt đầu trao lộc.</Empty>}</ResourceState>
+    {editing && <section className="lma-panel lma-form-panel" ref={editorRef}>
+      <div className="lma-panel-heading"><h2>{editing === 'new' ? 'Thêm phần quà' : 'Chỉnh sửa phần quà'}</h2><button className="lma-button lma-icon-button" aria-label="Đóng chỉnh sửa" onClick={() => setEditing(null)} disabled={busy}><X size={19}/></button></div>
+      <form className="lma-prize-form" onSubmit={submit}>
+        <label className="lma-field">Tên phần quà<input value={form.title} onChange={e => update('title', e.target.value)} required maxLength={100} disabled={pending}/></label>
+        <label className="lma-field">Lời chúc<input value={form.sub} onChange={e => update('sub', e.target.value)} maxLength={200} disabled={pending}/></label>
+        <label className="lma-field">Biểu tượng<input value={form.icon} onChange={e => update('icon', e.target.value)} required maxLength={16} disabled={pending}/></label>
+        <label className="lma-field">Màu sắc<div className="lma-color-input"><input type="color" value={form.color} onChange={e => update('color', e.target.value)} disabled={pending}/><span>{form.color}</span></div></label>
+        <label className="lma-field">Tỷ trọng<input type="number" min="1" max="10000" step="1" value={form.weight} onChange={e => update('weight', e.target.value)} required disabled={pending}/></label>
+        <label className="lma-field">Số tiền lì xì (VNĐ)<input type="number" min="1" max="1000000000" step="1" inputMode="numeric" value={form.amount} onChange={e => update('amount', e.target.value)} placeholder="Ví dụ: 50000" disabled={pending}/><small className="lma-field-note">Để trống nếu chưa đặt số tiền.</small></label>
+        <section className="lma-payout-editor" aria-labelledby="admin-qr-heading"><div><h3 id="admin-qr-heading">QR quà tặng cho người nhận</h3><p>Tạo quà tặng trong MoMo hoặc ZaloPay, rồi tải ảnh QR tương ứng lên. Người nhận không dùng hai ví này có thể gửi QR ngân hàng cá nhân.</p></div><div className="lma-qr-upload-grid">{['momo', 'zalopay'].map(method => <AdminQrUpload key={method} method={method} qr={form.payouts[method]} uploading={!!uploads[method]} disabled={pending} error={uploadErrors[method]} onUpload={file => upload(method, file)} onRemove={() => removeQr(method)}/>)}</div></section>
+        <label className="lma-checkbox"><input type="checkbox" checked={form.active} onChange={e => update('active', e.target.checked)} disabled={pending}/><span>Cho phép xuất hiện khi nhận lộc</span></label>
+        <p className="lma-form-hint">Xác suất được tính theo tỷ trọng của phần quà trong tổng tỷ trọng đang bật. Tắt phần quà để tạm ngưng xuất hiện.</p>
+        {error && <p className="lma-message lma-error" role="alert">{error}</p>}
+        <div className="lma-form-actions"><button className="lma-button lma-primary" type="submit" disabled={busy}>{pending ? <span className="lma-spinner"/> : <Check size={17}/>} {Object.values(uploads).some(Boolean) ? 'Đang tải ảnh QR…' : 'Lưu phần quà'}</button><button className="lma-button lma-secondary" type="button" onClick={() => setEditing(null)} disabled={busy}>Hủy</button></div>
+      </form>
+    </section>}
+    <ResourceState {...resource}>{items.length ? <div className="lma-prize-grid">{items.map(item => <article className="lma-prize-card" key={item.id}><div className="lma-prize-card-top"><span className="lma-prize-icon" style={{ backgroundColor: /^#[0-9a-f]{3,8}$/i.test(item.color || '') ? item.color : undefined }} aria-hidden="true">{item.icon}</span><span className={`lma-status ${item.active ? 'lma-status-available' : 'lma-status-disabled'}`}>{item.active ? 'Đang áp dụng' : 'Tạm ngưng'}</span></div><h3>{item.title}</h3>{item.amount > 0 && <strong className="lma-cash-amount">{number(item.amount)} ₫</strong>}<p>{item.sub}</p><div className="lma-prize-qr-tags"><span className={item.payouts?.momo ? 'is-ready' : ''}><QrCode size={13}/> MoMo{item.payouts?.momo ? ' ✓' : ' · Chưa đặt QR'}</span><span className={item.payouts?.zalopay ? 'is-ready' : ''}><QrCode size={13}/> ZaloPay{item.payouts?.zalopay ? ' ✓' : ' · Chưa đặt QR'}</span></div><div className="lma-prize-meta"><span>Tỷ trọng <b>{number(item.weight)}</b></span><span>Xác suất <b>{item.active && totalWeight ? new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 2 }).format(Number(item.weight) / totalWeight * 100) : '0'}%</b></span></div><button className="lma-button lma-secondary" onClick={() => edit(item)} disabled={busy}><Settings2 size={16}/> Chỉnh sửa</button></article>)}</div> : <Empty icon={Gift} title="Chưa có phần quà">Thêm phần quà để bắt đầu trao lộc.</Empty>}</ResourceState>
   </>;
+}
+
+function AdminQrUpload({ method, qr, uploading, disabled, error, onUpload, onRemove }) {
+  const name = method === 'momo' ? 'MoMo' : 'ZaloPay';
+  const inputRef = useRef(null);
+  const url = imageUrl(qr?.url);
+  return <div className={`lma-qr-uploader lma-qr-${method}`} aria-busy={uploading}>
+    <div className="lma-qr-uploader-heading"><span className="lma-wallet-mark">{method === 'momo' ? 'M' : 'Z'}</span><h4>Quà tặng {name}</h4></div>
+    <div className={`lma-qr-preview ${url ? 'has-image' : ''}`}>{url ? <img src={url} alt={`QR quà tặng ${name}`} loading="lazy"/> : <><QrCode size={40}/><span>Chưa có mã QR {name}</span></>}{uploading && <div className="lma-qr-uploading" role="status"><span className="lma-spinner"/> Đang tải ảnh QR…</div>}</div>
+    <input ref={inputRef} className="lma-sr-only" type="file" accept="image/png,image/jpeg,image/webp" aria-label={`Tải ảnh QR ${name}`} disabled={disabled || uploading} tabIndex={-1} onChange={event => { const file = event.target.files?.[0]; event.target.value = ''; if (file) onUpload(file); }}/>
+    <div className="lma-qr-upload-actions"><button className="lma-button lma-secondary" type="button" disabled={disabled || uploading} onClick={() => inputRef.current?.click()}><Upload size={15}/> {url ? 'Thay ảnh QR' : 'Tải ảnh QR'}</button>{qr && <button className="lma-button lma-icon-button" type="button" disabled={disabled || uploading} onClick={onRemove} title={`Xóa QR ${name}`} aria-label={`Xóa QR ${name}`}><Trash2 size={16}/></button>}</div>
+    <small className="lma-field-note">Ảnh PNG, JPG hoặc WebP, tối đa 50 MB.</small>
+    {error && <p className="lma-qr-error" role="alert">{error}</p>}
+    {url && !uploading && <small className="lma-qr-save-note">Bấm “Lưu phần quà” để áp dụng ảnh này.</small>}
+  </div>;
 }

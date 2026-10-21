@@ -78,7 +78,7 @@ function IllustratedTree() {
   </svg>;
 }
 
-export default function PeachTree({ opened = [], onOpened, disabled = false }) {
+export default function PeachTree({ opened = [], onOpened, onOpening, disabled = false }) {
   const [opening, setOpening] = useState(null);
   const [ready, setReady] = useState(false);
   const [fallback, setFallback] = useState(false);
@@ -137,7 +137,7 @@ export default function PeachTree({ opened = [], onOpened, disabled = false }) {
     scene.current = null;
     if (locked.current && !confirming.current && pending.current !== null) {
       const index = pending.current;
-      fallbackTimer.current = setTimeout(() => finish.current(index), 1100);
+      fallbackTimer.current = setTimeout(() => finish.current(index), 1600);
     }
   }, [fallback]);
 
@@ -150,8 +150,9 @@ export default function PeachTree({ opened = [], onOpened, disabled = false }) {
       pending.current = null;
       return;
     }
+    onOpening?.(index);
     setOpening(index);
-    if (!scene.current) fallbackTimer.current = setTimeout(() => finish.current(index), 1400);
+    if (!scene.current) fallbackTimer.current = setTimeout(() => finish.current(index), 1900);
   };
 
   return <section className={`peach-tree-card${opening !== null ? ' is-opening' : ''}`} aria-label="Cây đào treo lì xì">

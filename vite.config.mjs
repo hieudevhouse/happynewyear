@@ -1,11 +1,15 @@
 import { transformAsync } from '@babel/core';
 import presetReact from '@babel/preset-react';
 import { readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 import { loadEnv } from 'vite';
 
+const root = fileURLToPath(new URL('.', import.meta.url));
+
 export default ({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '');
+  const env = loadEnv(mode, root, '');
   return {
+  root,
   esbuild: false,
   plugins: [
     {
@@ -48,7 +52,7 @@ export default ({ mode }) => {
     host: '0.0.0.0',
     hmr: { overlay: false },
     proxy: {
-      '/api': { target: env.API_PROXY_TARGET || `http://127.0.0.1:${env.PORT || 4000}`, changeOrigin: false }
+      '/api': { target: env.API_PROXY_TARGET || 'http://127.0.0.1:4000', changeOrigin: false }
     }
   },
   optimizeDeps: {

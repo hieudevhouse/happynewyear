@@ -1,0 +1,31 @@
+.festive-sound-toggle {
+  position: fixed;
+  top: max(1rem, env(safe-area-inset-top));
+  right: max(1rem, env(safe-area-inset-right));
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  min-height: 2.75rem;
+  padding: .65rem .9rem;
+  border: 1px solid #e6bd76;
+  border-radius: 2rem;
+  background: #fff8e8f5;
+  color: #8b382c;
+  box-shadow: 0 .25rem 1rem #53291c18;
+  font-size: .75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.festive-sound-toggle:hover { background: #fff0ca; }
+.festive-sound-toggle:focus-visible { outline: 3px solid #c78032; outline-offset: 3px; }
+.festive-sound-toggle:disabled { opacity: .55; cursor: default; }
+.festive-sound-toggle.is-playing .festive-sound-note { color: #b47720; }
+
+@media (max-width: 30rem) {
+  .festive-sound-toggle { top: max(.75rem, env(safe-area-inset-top)); right: max(.75rem, env(safe-area-inset-right)); padding: .6rem .75rem; gap: .4rem; }
+  .festive-sound-note { display: none; }
+}
