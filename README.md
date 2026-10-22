@@ -18,10 +18,10 @@ npm run dev
 
 ```dotenv
 VITE_API_BASE_URL=/api
-API_PROXY_TARGET=http://127.0.0.1:4000
+API_PROXY_TARGET=https://happynewyear-backend.vercel.app
 ```
 
-Khởi động API theo [hướng dẫn trong repo backend](https://github.com/hieudevhouse/happynewyear-backend). Khi chạy dev, Vite nhận request `/api` và chuyển tới `API_PROXY_TARGET`; đổi giá trị này nếu API ở server/cổng khác. Proxy này không được đóng gói vào `dist/`.
+Frontend mặc định kết nối backend đã deploy tại `https://happynewyear-backend.vercel.app`. Khi chạy dev hoặc preview, Vite nhận request `/api` và chuyển tới `API_PROXY_TARGET`. Để dùng backend local theo [hướng dẫn trong repo backend](https://github.com/hieudevhouse/happynewyear-backend), đổi `API_PROXY_TARGET=http://127.0.0.1:4000`. Cấu hình proxy Vite không được đóng gói vào `dist/`; Vercel dùng `vercel.json` cho cùng đường dẫn `/api`.
 
 - Nhập mã: `http://localhost:5173/`
 - Nhập tên: `http://localhost:5173/info`
@@ -29,7 +29,7 @@ Khởi động API theo [hướng dẫn trong repo backend](https://github.com/h
 - Đăng nhập quản trị: `http://localhost:5173/loginl`
 - Quản trị: `http://localhost:5173/adminl`
 
-Backend phải cho phép origin chính xác `http://localhost:5173` trong `CLIENT_ORIGIN`. Để mở trên điện thoại cùng Wi-Fi, truy cập `http://<IPv4-của-máy>:5173` và thêm đúng origin đó vào backend; nhiều origin ngăn cách bằng dấu phẩy. Với dev HTTP local, backend dùng `COOKIE_SECURE=false`, `COOKIE_SAME_SITE=lax`.
+Backend phải cho phép origin chính xác `http://localhost:5173` trong `CLIENT_ORIGIN`. Để mở trên điện thoại cùng Wi-Fi, truy cập `http://<IPv4-của-máy>:5173` và thêm đúng origin đó vào backend; nhiều origin ngăn cách bằng dấu phẩy. Nếu chạy cả backend bằng HTTP local, backend dùng `COOKIE_SECURE=false`, `COOKIE_SAME_SITE=lax`. Backend Vercel dùng cấu hình cookie production với HTTPS.
 
 ## Lệnh
 
@@ -45,7 +45,15 @@ Backend phải cho phép origin chính xác `http://localhost:5173` trong `CLIEN
 
 Nếu xem trước bằng `npm run preview`, backend cần cho phép origin đang truy cập, ví dụ `http://localhost:4173`. Các bài kiểm tra API và MongoDB nằm trong repo backend.
 
-## Deploy riêng frontend
+## Deploy frontend trên Vercel
+
+Import repo `hieudevhouse/happynewyear`, Root Directory `./`, Framework Preset **Vite**, Build Command `npm run build`, Output Directory `dist`. Đặt `VITE_API_BASE_URL=/api` nếu đã tạo biến này trên dashboard; mặc định của ứng dụng cũng là `/api`.
+
+File `vercel.json` chuyển `/api/:path*` tới `https://happynewyear-backend.vercel.app/api/:path*` và phục vụ các route React bằng `index.html`. Cookie phiên được gửi qua domain frontend. Backend cho phép domain production `https://happynewyear-six-bay.vercel.app`; thêm origin khác vào `CLIENT_ORIGIN` khi đổi domain. Proxy vẫn giữ header `Origin` của trình duyệt.
+
+Sau khi deploy, kiểm tra `https://happynewyear-six-bay.vercel.app/api/health`: phải nhận JSON `{"ok":true,"database":"connected"}`. Tải lại trực tiếp `/loginl` hoặc `/adminl` để kiểm tra route React. Xem thêm [hướng dẫn deploy](deploy/README.md).
+
+## Deploy riêng frontend trên hosting khác
 
 Trong `.env.production`, đặt URL API công khai, gồm hậu tố `/api`:
 

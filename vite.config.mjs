@@ -52,7 +52,7 @@ export default ({ mode }) => {
     host: '0.0.0.0',
     hmr: { overlay: false },
     proxy: {
-      '/api': { target: env.API_PROXY_TARGET || 'http://127.0.0.1:4000', changeOrigin: false }
+      '/api': { target: env.API_PROXY_TARGET || 'https://happynewyear-backend.vercel.app', changeOrigin: true }
     }
   },
   optimizeDeps: {

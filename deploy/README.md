@@ -2,6 +2,14 @@
 
 Repo này là frontend độc lập. Mọi lệnh chạy tại thư mục gốc bản clone `happynewyear`; bản build nằm ở **`dist/`**, không có tiền tố `frontend/`. Backend được triển khai riêng từ [happynewyear-backend](https://github.com/hieudevhouse/happynewyear-backend).
 
+## Vercel với backend đã deploy
+
+Repo có sẵn `vercel.json` chuyển `/api/:path*` tới `https://happynewyear-backend.vercel.app/api/:path*`, rồi fallback các route React về `index.html`. Cookie phiên dùng domain frontend, và phản hồi API không được cache.
+
+Import repo frontend với Root Directory `./`, preset **Vite**, Build Command `npm run build`, Output Directory `dist`. Dùng `VITE_API_BASE_URL=/api` hoặc bỏ biến này để dùng mặc định của ứng dụng. Backend cho phép frontend production `https://happynewyear-six-bay.vercel.app`. Khi dùng domain khác, thêm origin chính xác vào `CLIENT_ORIGIN`, không có path hoặc dấu `/` cuối; thêm `http://localhost:5173` và `http://localhost:4173` nếu cần chạy dev/preview.
+
+Sau deploy, gọi `https://<domain-frontend>/api/health` và kiểm tra nhận JSON từ MongoDB backend. Đường dẫn `/loginl`, `/lucky`, `/adminl` phải tải lại trực tiếp được. Cấu hình theo [Vercel external rewrites](https://vercel.com/docs/rewrites) và [Vite SPA routing](https://vercel.com/docs/frameworks/frontend/vite#using-vite-to-make-spas).
+
 ## Gọi trực tiếp API ở hostname riêng
 
 Ví dụ hai server có HTTPS hợp lệ:
